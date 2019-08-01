@@ -258,6 +258,26 @@
     </table>
 
 <h2 id="api-error-codes">API error codes</h2>
+<pre class="highlight example"><code>
+    <h3>Client error response body</h3>
+      {
+        "code": 1001,
+        "message": "Invalid input",
+        "errors": [
+            {
+                "resource": "transaction",
+                "field": "currency",
+                "type": "invalid"
+            },
+            {
+                "resource": "customer",
+                "field": "ip",
+                "type": "missing"
+            }
+        ]
+    
+      }
+  </code></pre>
 <p><b>HTTP Status Codes</b>
 <br>
 API responds with the following HTTP status codes in case of errors:</p>
@@ -295,26 +315,6 @@ API responds with the following HTTP status codes in case of errors:</p>
     </tbody>
   </table>
 <h3>Error Response Body</h3>
-<pre class="highlight plaintext"><code>
-  # Client Error Response
-    {
-      "code": 1001,
-      "message": "Invalid input",
-      "errors": [
-          {
-              "resource": "transaction",
-              "field": "currency",
-              "type": "invalid"
-          },
-          {
-              "resource": "customer",
-              "field": "ip",
-              "type": "missing"
-          }
-      ]
-  
-    }
-</code></pre>
 
 <p><b>Client Errors:</b></p>
 <p>In case of client errors, API responds with a code and message parameter. An optional errors collection may be returned with more information about the error occurred.</p>
@@ -557,7 +557,7 @@ If you have problems with this please take a look at <b>"How to use our API test
 <p>These two environments are totally isolated - the identifiers and API keys are different in the Test and Live environments – so please be careful and do not mix them up</p>
 
 <h2 id="authentication">Authentication</h2>
-<pre class="highlight shell"><code>curl -u 1ca58c6f-89c2-442f-950a-cd5fa3484397:d4a581cceff06c03a49915643661ee75 https://api.maksekeskus.ee/transactions
+<pre class="highlight example"><code>curl -u 1ca58c6f-89c2-442f-950a-cd5fa3484397:d4a581cceff06c03a49915643661ee75 https://api.maksekeskus.ee/transactions
 </code></pre>
 
 <p>API requests are made via HTTPS. Each request must be authenticated with HTTP Basic Authentication using Shop&rsquo;s ID (as username) and an API authentication key (as password)<br>
@@ -573,7 +573,7 @@ Remember that anyone who has the authentication token has access to see and chan
 
 <h2 id="validating-the-response">Validating the response</h2>
 <pre><code>
-#JAVA Example of validate the response
+<h3>Java code example for validating the response</h3>
 private static String sha512(String input, String secret)  {
       MessageDigest md5;
       try {
@@ -609,14 +609,14 @@ private static String sha512(String input, String secret)  {
 <p>A shop represents an entity that is collecting online payments.</p>
 
 <h2 id="get-configuration">Get configuration</h2>
-<pre class="highlight php"><code>$myEnvironment=array(
+<pre class="highlight example"><code>$myEnvironment=array(
     'platform'=&gt;'magento 2.1',
     'module'=&gt;'codejunkies 1.0.1');
 $request = array('environment' =&gt; json_encode($myEnvironment) );
 
 $shop = $MK-&gt;getShopConfig($request);
 </code></pre>
-<pre class="highlight shell"><code>
+<pre class="highlight example"><code>
 </code></pre>
 
 <p>Retrieves configuration of the &#39;Shop&rsquo; as a json array that could be handy to cache on your server side. 
@@ -645,10 +645,55 @@ We need this information for better problem resolution capability and for estima
 <p>JSON: <a href="#shop-object">Shop Object</a></p>
 
 <h2 id="get-account-statement">Get account statement</h2>
-<pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
+<pre class="highlight example"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $statement = $MK-&gt;getAccountStatement($request);
 </code></pre>
-<pre class="highlight shell"><code></code></pre>
+
+<pre class="highlight example"><code>
+<h3>Get account statement response body</h3>
+[
+    {
+        "created": "2019-04-12T09:09:09+0000",
+        "amount": 12.95,
+        "type": "INCOME",
+        "transaction": "468526",
+        "channel": "Visa/Mastercard",
+        "balance_before": 212.82,
+        "balance_after": 225.77,
+        "merchant_reference": "123abc",
+        "payout_id": "17041",
+        "original_amount": 0.0,
+        "exchange_rate": 0.0
+    },
+    {
+        "created": "2019-04-12T09:09:09+0000",
+        "amount": -0.3,
+        "type": "TRX_FEE_FIX",
+        "transaction": "468526",
+        "channel": "Visa/Mastercard",
+        "balance_before": 225.77,
+        "balance_after": 225.47,
+        "merchant_reference": "123abc",
+        "payout_id": "17041",
+        "original_amount": 0.0,
+        "exchange_rate": 0.0
+    },
+    {
+        "created": "2019-04-12T09:09:09+0000",
+        "amount": -0.06,
+        "type": "VAT",
+        "transaction": "468526",
+        "channel": "Visa/Mastercard",
+        "balance_before": 225.47,
+        "balance_after": 225.41,
+        "merchant_reference": "123abc",
+        "payout_id": "17041",
+        "original_amount": 0.0,
+        "exchange_rate": 0.0
+    }
+]
+</code></pre>
+<pre class="highlight example"><code></code></pre>
 
 <p><b>Either since or payout_id is required other fields are voluntary. <br>
   For XML and camt053 format endpoint until parameter is also required!</b></p>
@@ -694,20 +739,6 @@ $statement = $MK-&gt;getAccountStatement($request);
 <p><a href="https://developer.maksekeskus.ee/shop.accountstatement.php">Try in API tester</a></p>
 
 <p>See response example in right panel</p>
-<pre class="highlight json"><code><span class="err">accounting-record-example:</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-        </span><span class="nt">"created"</span><span class="p">:</span><span class="s2">"2016-09-29T08:44:38+0000"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"amount"</span><span class="p">:</span><span class="mf">-0.06</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"VAT"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"transaction"</span><span class="p">:</span><span class="s2">"87877"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"channel"</span><span class="p">:</span><span class="s2">"EE_SEB"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"balance_before"</span><span class="p">:</span><span class="mf">93.24000000000001</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"balance_after"</span><span class="p">:</span><span class="mf">93.18</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"merchant_reference"</span><span class="p">:</span><span class="s2">"16"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"original_amount"</span><span class="p">:</span><span class="mf">0.0</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"exchange_rate"</span><span class="p">:</span><span class="mf">0.0</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span></code></pre>
 
 <p>You may also request the statement as an .xml file</p>
 
@@ -725,11 +756,11 @@ $statement = $MK-&gt;getAccountStatement($request);
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">GET /shop/fees</code></p>
-<pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
+<pre class="highlight example"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $statement = $MK-&gt;getShopFees($request);
 
 </code></pre>
-<pre class="highlight shell"><code>
+<pre class="highlight example"><code>
 </code></pre>
 
 <p><a href="https://developer.maksekeskus.ee/shop.fees.php">Try in API tester </a></p>
@@ -812,7 +843,7 @@ response-record-example:
 <td style="text-align: left">2016-02-03T02:00:00+0000</td>
 </tr>
 </tbody></table>
-<pre class="highlight plaintext"><code>
+<pre class="highlight example"><code>
 
 
 
@@ -863,7 +894,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <p><a href="https://developer.maksekeskus.ee/transaction.php">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
-<pre class="highlight json"><code><span class="err">response-example:</span><span class="w">
+<pre class="highlight example"><code><span class="err">response-example:</span><span class="w">
 </span><span class="p">{</span><span class="w">
     </span><span class="nt">"amount"</span><span class="p">:</span><span class="mf">12.95</span><span class="p">,</span><span class="w">
     </span><span class="nt">"currency"</span><span class="p">:</span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
@@ -934,7 +965,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 </span></code></pre>
 
 <h2 id="get-transaction">Get transaction</h2>
-<pre class="highlight php"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
+<pre class="highlight example"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
 </code></pre>
 
 <h4 id="http-request">HTTP REQUEST</h4>
@@ -948,7 +979,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <p>JSON: <a href="#transaction-object">Transaction Object</a></p>
 
 <h2 id="get-transaction-statement">Get transaction statement</h2>
-<pre class="highlight php"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
+<pre class="highlight example"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
 </code></pre>
 
 <h4 id="http-request">HTTP REQUEST</h4>
@@ -977,7 +1008,7 @@ $transaction = $MK-&gt;getTransactions($request);
 <p>JSON: array of <a href="#transaction-object">Transaction Objects</a></p>
 
 <h2 id="create-payment">Create payment</h2>
-<pre class="highlight php"><code>$request = array(
+<pre class="highlight example"><code>$request = array(
     'amount' =&gt; '4.12',
     'currency' =&gt; 'EUR',
     'token' =&gt; '6385f130-8e5a-409a-a88b-ac0eefe1467e'
@@ -1002,7 +1033,7 @@ In context of bank-link payments flow the &#39;payment&rsquo; creation operation
 <h2 id="refund-object">Refund object</h2>
 
 <h2 id="create-refund">Create refund</h2>
-<pre class="highlight php"><code>$request = array(
+<pre class="highlight example"><code>$request = array(
     'amount' =&gt; '4.12',
     'comment' =&gt; 'broken package compensation'
 );
@@ -1019,7 +1050,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <h4 id="http-response">HTTP RESPONSE</h4>
 
 <h2 id="get-refund">Get refund</h2>
-<pre class="highlight php"><code>$payment = $MK-&gt;getRefund($refund_id);
+<pre class="highlight example"><code>$payment = $MK-&gt;getRefund($refund_id);
 </code></pre>
 
 <h4 id="http-request">HTTP REQUEST</h4>
@@ -1033,7 +1064,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <p>JSON: <a href="#refund-object">Refund Object</a></p>
 
 <h2 id="gert-refun-list">Get refund list</h2>
-<pre class="highlight php"><code>$payment = $MK-&gt;getRefunds($refund_id);
+<pre class="highlight example"><code>$payment = $MK-&gt;getRefunds($refund_id);
 </code></pre>
 
 <h4 id="http-request">HTTP REQUEST</h4>
@@ -1062,8 +1093,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="php">PHP SDK</a>
-                <a href="#" data-language-name="shell">cURL</a>
+                <a href="#" data-language-name="example">Examples</a>
           </div>
       </div>
     </div>
