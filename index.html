@@ -99,7 +99,7 @@
       </span>
     </a>
     <div class="tocify-wrapper">
-      <img src="images/logo.png" />
+      <img src="images/m-logo.svg" />
         <div class="lang-selector">
               <a href="#" data-language-name="php">PHP SDK</a>
               <a href="#" data-language-name="shell">cURL</a>
@@ -503,7 +503,7 @@ This is how you get you API keys for the integration.</p>
 </ul>
 
 <p>The entry-points can be declared in your shop configuration, you can change them in Merchant Portal under API settings. You can get there by going to <a href="https://merchant-test.maksekeskus.ee/api.html" target="_blank">Test Merchant Portal</a><br>
-<p><img alt="banklink payment diagram" src="images/endpoints.PNG" /></p>
+<p><img alt="api endpoints" src="images/endpoints.PNG" /></p>
 <p>Alternatively, you can dynamically specify them for each transaction when you create the transaction (transaction_urls). For example using API tester you can set these urls here <a href="https://developer.maksekeskus.ee/transaction.php" target="_blank">API tester - Create transaction</a> <br>
 <br>
 If you have problems with this please take a look at <b>"How to use our API tester?"</b> section. </p>
@@ -516,6 +516,8 @@ If you have problems with this please take a look at <b>"How to use our API test
     <li>For example select in the <b>Predefined setup</b> "mk-test" or setup your own API keys from the <b>Shop Configuration</b>. Make sure you use <b>test</b> environment</li>
     <li>After setting up your context with either predefined setup or your shop setup click on the <b>Save context</b> button which is located in the bottom of the page.</li>
   </ol>
+
+  <p><img alt="setting context in api tester" src="images/context.PNG" /></p>
   </p>
   <p>
   <br> <b>Making your first API tester request</b> <br>
@@ -527,6 +529,8 @@ If you have problems with this please take a look at <b>"How to use our API test
     <li>In the response body you can see all the payment method links and these are duplicated also in the bottom of the page.</li>
     <li>Clicking on "redirect" link in the bottom of the page will send you to the payment page of just created transaction.</li>
   </ul>
+  <p><img alt="response from the api tester" src="images/paymentlinks.PNG" /></p>
+
 </p>
 
 <h1 id="making-requests">Making requests with REST API</h1>
@@ -604,7 +608,7 @@ private static String sha512(String input, String secret)  {
 
 <p>A shop represents an entity that is collecting online payments.</p>
 
-<h2 id="get-configuration">get configuration</h2>
+<h2 id="get-configuration">Get configuration</h2>
 <pre class="highlight php"><code>$myEnvironment=array(
     'platform'=&gt;'magento 2.1',
     'module'=&gt;'codejunkies 1.0.1');
@@ -640,7 +644,7 @@ We need this information for better problem resolution capability and for estima
 
 <p>JSON: <a href="#shop-object">Shop Object</a></p>
 
-<h2 id="get-account-statement">get account statement</h2>
+<h2 id="get-account-statement">Get account statement</h2>
 <pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $statement = $MK-&gt;getAccountStatement($request);
 </code></pre>
@@ -714,7 +718,7 @@ $statement = $MK-&gt;getAccountStatement($request);
 <p><code class="prettyprint">GET /v1/shop/accountstatements/camt053?since=2019-04-10%2B0300&until=2019-04-10%2B0300</code></p>
 
 
-<h2 id="get-fees">get Fees</h2>
+<h2 id="get-fees">Get Fees</h2>
 
 <p>Returns accounting records that are not realted to transactions (monthly service fees).</p>
 
@@ -730,34 +734,35 @@ $statement = $MK-&gt;getShopFees($request);
 
 <p><a href="https://developer.maksekeskus.ee/shop.fees.php">Try in API tester </a></p>
 
-<table><thead>
-<tr>
-<th>field</th>
-<th style="text-align: center">m/o</th>
-<th style="text-align: right">description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>since</td>
-<td style="text-align: center">m</td>
-<td style="text-align: right"></td>
-</tr>
-<tr>
-<td>until</td>
-<td style="text-align: center">o</td>
-<td style="text-align: right"></td>
-</tr>
-<tr>
-<td>page</td>
-<td style="text-align: center">o</td>
-<td style="text-align: right"></td>
-</tr>
-<tr>
-<td>per_page</td>
-<td style="text-align: center">o</td>
-<td style="text-align: right"></td>
-</tr>
-</tbody></table>
+<table>
+  <tbody>
+  <tr>
+  <td><b>Field</b></td>
+  <td><b>Required</b></td>
+  <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>since</td>
+  <td>Yes (when using api tester, no with Postman)</td>
+  <td>From which date from you would like to query fees.</td>
+  </tr>
+  <tr>
+  <td>until</td>
+  <td>No</td>
+  <td>Until which date you would like to query fees to.</td>
+  </tr>
+  <tr>
+  <td>page</td>
+  <td>No</td>
+  <td>Which page to show. This is useful for frontend together with per_page parameter</td>
+  </tr>
+  <tr>
+  <td>per_page</td>
+  <td>No</td>
+  <td>How many statements in one page. This is useful for frontend together with page parameter</td>
+  </tr>
+  </tbody>
+  </table>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -928,7 +933,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
-<h2 id="get-transaction">get transaction</h2>
+<h2 id="get-transaction">Get transaction</h2>
 <pre class="highlight php"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
 </code></pre>
 
@@ -942,7 +947,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 
 <p>JSON: <a href="#transaction-object">Transaction Object</a></p>
 
-<h2 id="get-transaction-statement">get transaction statement</h2>
+<h2 id="get-transaction-statement">Get transaction statement</h2>
 <pre class="highlight php"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
 </code></pre>
 
@@ -956,7 +961,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 
 <p>JSON: <a href="#transaction-object">Transaction Object</a></p>
 
-<h2 id="get-transaction-list">get transaction list</h2>
+<h2 id="get-transaction-list">Get transaction list</h2>
 <pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $transaction = $MK-&gt;getTransactions($request);
 </code></pre>
@@ -971,7 +976,7 @@ $transaction = $MK-&gt;getTransactions($request);
 
 <p>JSON: array of <a href="#transaction-object">Transaction Objects</a></p>
 
-<h2 id="create-payment">create payment</h2>
+<h2 id="create-payment">Create payment</h2>
 <pre class="highlight php"><code>$request = array(
     'amount' =&gt; '4.12',
     'currency' =&gt; 'EUR',
@@ -994,9 +999,9 @@ In context of bank-link payments flow the &#39;payment&rsquo; creation operation
 
 <h1 id="refunds">Refunds</h1>
 
-<h2 id="refund-object">refund object</h2>
+<h2 id="refund-object">Refund object</h2>
 
-<h2 id="create-refund">create refund</h2>
+<h2 id="create-refund">Create refund</h2>
 <pre class="highlight php"><code>$request = array(
     'amount' =&gt; '4.12',
     'comment' =&gt; 'broken package compensation'
@@ -1013,7 +1018,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
-<h2 id="get-refund">get refund</h2>
+<h2 id="get-refund">Get refund</h2>
 <pre class="highlight php"><code>$payment = $MK-&gt;getRefund($refund_id);
 </code></pre>
 
@@ -1027,7 +1032,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <p>JSON: <a href="#refund-object">Refund Object</a></p>
 
-<h2 id="gert-refun-list">gert refund list</h2>
+<h2 id="gert-refun-list">Get refund list</h2>
 <pre class="highlight php"><code>$payment = $MK-&gt;getRefunds($refund_id);
 </code></pre>
 
