@@ -636,7 +636,7 @@ We need this information for better problem resolution capability and for estima
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /shop/configuration</code></p>
+<p><code class="prettyprint">GET /v1/shop/configuration</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/shop.getconfig.php">Try in API tester</a></p>
 
@@ -732,9 +732,9 @@ $statement = $MK-&gt;getAccountStatement($request);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /shop/accountstatements</code></p>
-<p><code class="prettyprint">GET /shop/accountstatements/xml</code></p>
-<p><code class="prettyprint">GET /shop/accountstatements/camt053</code></p>
+<p><code class="prettyprint">GET /v1/shop/accountstatements</code></p>
+<p><code class="prettyprint">GET /v1/shop/accountstatements/xml</code></p>
+<p><code class="prettyprint">GET /v1/shop/accountstatements/camt053</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/shop.accountstatement.php">Try in API tester</a></p>
 
@@ -753,15 +753,37 @@ $statement = $MK-&gt;getAccountStatement($request);
 
 <p>Returns accounting records that are not realted to transactions (monthly service fees).</p>
 
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">GET /shop/fees</code></p>
+<p><code class="prettyprint">GET /v1/shop/fees</code></p>
 <pre class="highlight example"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $statement = $MK-&gt;getShopFees($request);
+</code></pre>
 
-</code></pre>
 <pre class="highlight example"><code>
-</code></pre>
+    <h3>Get fees response body</h3>
+[
+    {
+        "object":"accounting",
+        "amount":-10.0,
+        "vat":-2.0,
+        "id":"bf37a5d4-4b7f-4f44-900c-b288cd1562da",
+        "created_at":"2019-04-30T01:00:37+0000"
+    },
+    {
+        "object":"accounting",
+        "amount":-10.0,
+        "vat":-2.0,
+        "id":"11c14967-6cbf-45bc-a618-bcc44e2b4d37",
+        "created_at":"2019-04-30T20:30:07+0000"
+    },
+    {
+        "object":"accounting",
+        "amount":-5.0,
+        "vat":-1.0,
+        "id":"b460f282-0346-45be-b8e8-8a455cde17d6",
+        "created_at":"2019-04-30T20:30:07+0000"
+    }
+]
+    </code></pre>
 
 <p><a href="https://developer.maksekeskus.ee/shop.fees.php">Try in API tester </a></p>
 
@@ -795,79 +817,11 @@ $statement = $MK-&gt;getShopFees($request);
   </tbody>
   </table>
 
-<h4 id="http-response">HTTP RESPONSE</h4>
+<h4 id="http-request">HTTP REQUEST</h4>
+<p><code class="prettyprint">GET /v1/shop/fees?since=2019-04-10%2B0300</code></p>
 
-<p>Array of Fee Record objects
-&ldquo;`json
-response-record-example:
-    {
-        &quot;object&rdquo;:&ldquo;accounting&rdquo;,
-        &ldquo;amount&rdquo;:-20.0,
-        &ldquo;vat&rdquo;:-4.0,
-        &ldquo;id&rdquo;:&ldquo;8a1a459f-3368-41fc-963b-5215b18f8940&rdquo;,
-        &ldquo;created_at&rdquo;:&ldquo;2016-02-03T02:00:00+0000&rdquo;
-    }</p>
-
-<h4 id="fee-record-object">Fee record object</h4>
-
-<table><thead>
-<tr>
-<th>field</th>
-<th style="text-align: center">m/o</th>
-<th style="text-align: left">description / example</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>object</td>
-<td style="text-align: center">m</td>
-<td style="text-align: left">Object type =  <code class="prettyprint">accounting</code></td>
-</tr>
-<tr>
-<td>amount</td>
-<td style="text-align: center">m</td>
-<td style="text-align: left">-20.0</td>
-</tr>
-<tr>
-<td>vat</td>
-<td style="text-align: center">o</td>
-<td style="text-align: left">-4.0</td>
-</tr>
-<tr>
-<td>id</td>
-<td style="text-align: center">m</td>
-<td style="text-align: left"></td>
-</tr>
-<tr>
-<td>created_at</td>
-<td style="text-align: center">m</td>
-<td style="text-align: left">2016-02-03T02:00:00+0000</td>
-</tr>
-</tbody></table>
+<h2 id="Create transaction">Create transaction</h2>
 <pre class="highlight example"><code>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Transactions
-## Transaction object
-
-
-
-
-## create transaction
-
-```php
 $reqbody = array(
         'transaction' =&gt; array(
             'amount' =&gt; '12.95',
@@ -881,12 +835,73 @@ $reqbody = array(
             'locale' =&gt; 'et'
             )
         );
-
 $transaction = $MK-&gt;createTransaction($_POST);
+
+<h3>Example JSON</h3>
+{
+  "customer": {
+    "country": "ee",
+    "email": "mk.test@maksekeskus.ee",
+    "ip": "80.235.22.114",
+    "locale": "et"
+  },
+  "transaction": {
+    "amount": "99.99",
+    "currency": "EUR",
+    "id": "1",
+    "merchant_data": "Merchant Data",
+    "recurring_required": true,
+    "reference": "reference",
+    "transaction_url": {
+      "cancel_url": {
+        "method": "POST",
+        "url": "CANCELURL"
+      },
+      "notification_url": {
+        "method": "POST",
+        "url": "CALLBACKURL"
+      },
+      "return_url": {
+        "method": "POST",
+        "url": "RETURNURL"
+      }
+    }
+  }
+}
 </code></pre>
 
 <p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls managable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
 
+<table>
+    <tbody>
+    <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>country</td>
+    <td>No(Default will be chosen if not provided)</td>
+    <td>ISO 3166 country code <a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">List of ISO 3166 country codes</a></td>
+    </tr>
+    <tr>
+    <td>email;</td>
+    <td>No</td>
+    <td>Customer email.</td>
+    </tr>
+    <tr>
+    <td>locale</td>
+    <td>No(Default will be chosen if not provided)</td>
+    <td>ISO 639-1 locale code <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">List of ISO 3166 country codes</a></td>
+    </tr>
+    <tr>
+    <td>ip</td>
+    <td>Yes</td>
+    <td>Customer IP address.</td>
+    </tr>
+    </tbody>
+  </table>
+  
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /transactions</code></p>
@@ -970,7 +985,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /transactions/{id}</code></p>
+<p><code class="prettyprint">GET /v1/transactions/{id}</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.get.php">Try in API tester</a></p>
 
@@ -984,7 +999,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /transactions/{id}/statement</code></p>
+<p><code class="prettyprint">GET /v1/transactions/{id}/statement</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.statement.php">Try in API tester</a></p>
 
@@ -999,7 +1014,7 @@ $transaction = $MK-&gt;getTransactions($request);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /transactions</code></p>
+<p><code class="prettyprint">GET /v1/transactions</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.list.php">Try in API tester</a></p>
 
@@ -1055,7 +1070,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /refunds/{$refund_id}</code></p>
+<p><code class="prettyprint">GET /v1/refunds/{$refund_id}</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/refund.php">Try in API tester</a></p>
 
@@ -1069,7 +1084,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">GET /refunds</code></p>
+<p><code class="prettyprint">GET /v1/refunds</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/refund.list.php">Try in API tester</a></p>
 
@@ -1079,7 +1094,93 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <h1 id="destinations">Destinations</h1>
 
-<aside class="warning">using this api call is subject of monthly fee</aside>
+<h2 id="get-shipment-destinations">Get shipment destinations</h2>
+<pre class="highlight example"><code>
+    <h3>Example request</h3>
+    {
+      "carriers": [
+        "OMNIVA"
+      ],
+      "countries": [
+        "EE"
+      ],
+      "types": [
+        "PO"
+      ]
+    }
+
+    <h3>Example response</h3>
+  [
+    {
+        "carrier": "OMNIVA",
+        "type": "PO",
+        "name": "Abja-Paluoja postipunkt",
+        "city": "Mulgi vald",
+        "country": "EE",
+        "availability": "E-R 9.00-18.00; L 9:00-14:00; P suletud",
+        "tempServiceHours": "10.06-10.08 avatud: E-R 9:00-17:00; L 9:00-14:00; P suletud;",
+        "tempServiceHoursUntil": "10.08.2019",
+        "provider": "OMNIVA",
+        "id": "69494",
+        "address": "Pärnu maantee 21",
+        "zip": "69494",
+        "x": "58.1261506146408",
+        "y": "25.353927148133"
+    },
+    {
+        "carrier": "OMNIVA",
+        "type": "PO",
+        "name": "Adavere postipunkt",
+        "city": "Põltsamaa vald",
+        "country": "EE",
+        "availability": "E-P 9:00-19:00",
+        "provider": "OMNIVA",
+        "id": "48094",
+        "address": "Tallinna maantee 6",
+        "zip": "48094",
+        "x": "58.7059373138417",
+        "y": "25.8996412135384"
+    }
+  ]
+    </code></pre>
+
+<aside class="warning">Using this api call is subject of monthly fee</aside>
+
+<table>
+    <tbody>
+    <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>carries</td>
+    <td>No</td>
+    <td>List of carries, if blank shows all. OMNIVA,
+        (SMARTPOST,
+        DPD,
+        OMNIVA_LV,
+        PASTA_LV,
+        OMNIVA_LT)</td>
+    </tr>
+    <tr>
+    <td>countries</td>
+    <td>No</td>
+    <td><a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">List of ISO 3166 country codes</a></td>
+    </tr>
+    <tr>
+    <td>Types</td>
+    <td>No</td>
+    <td>APT = Automated parcel terminal, PO = Post office, PUP = Pickup point</td>
+    </tr>
+    </tbody>
+    </table>
+    <!-- DivTable.com -->
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /v1/shipments/destinations</code></p>
+
 
 <h1 id="shipments">Shipments</h1>
 
