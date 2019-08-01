@@ -1,0 +1,470 @@
+<h1 id="rest-api">- Rest API -</h1>
+
+<h1 id="making-requests">Making requests</h1>
+
+<h2 id="environments-amp-endpoints">Environments &amp; Endpoints</h2>
+
+<ul>
+<li><strong>Live environment</strong>
+
+<ul>
+<li>Merchant Portal - <a href="https://merchant.maksekeskus.ee/">https://merchant.maksekeskus.ee/</a></li>
+<li>API Endpoint - <a href="https://api.maksekeskus.ee/v1/">https://api.maksekeskus.ee/v1/</a></li>
+</ul></li>
+<li><strong>Test environment</strong>
+
+<ul>
+<li>Merchant Portal - <a href="https://merchant-test.maksekeskus.ee/">https://merchant-test.maksekeskus.ee/</a></li>
+<li>API Endpoint - <a href="https://api-test.maksekeskus.ee/v1/">https://api-test.maksekeskus.ee/v1/</a></li>
+</ul></li>
+</ul>
+
+<p>The Test Environment is a safe sandbox where you can explore and learn how our systems function without worrying about messing up your real account at MakeCommerce / Maksekeskus.</p>
+
+<p>These two environments are totally isolated - the identifiers and API keys are different in the Test and Live environments – so please be careful and do not mix them up</p>
+
+<h2 id="authentication">Authentication</h2>
+<pre class="highlight shell"><code>curl -u 1ca58c6f-89c2-442f-950a-cd5fa3484397:d4a581cceff06c03a49915643661ee75 https://api.maksekeskus.ee/transactions
+</code></pre>
+
+<p>API requests are made via HTTPS. Each request must be authenticated with HTTP Basic Authentication using Shop&rsquo;s ID (as username) and an API authentication key (as password)<br>
+Two types of authentication keys exist: </p>
+
+<ul>
+<li><em>Publishable Key</em> is used for API requests from merchant&rsquo;s frontend systems where the token might be made available for the public or otherwise compromised. Used for safe requests like creating transaction objects, fetching payment methods list, accepted currencies, etc.</li>
+<li><em>Secret Key</em> (currently also known as API key) is used for requests like creating payments, charging cards, etc.</li>
+</ul>
+
+<p>The API tokens can be found under the API settings section in the Merchant Interface.
+Remember that anyone who has the authentication token has access to see and change everything available via the API. If an API key has been discovered by another party, it can be changed using Reset the Publishable/Secret Key option under the API settings section in the Merchant Interface.</p>
+
+<h2 id="validating-the-response">Validating the response</h2>
+<pre class="highlight php"><code>if ($MK-&gt;verifyMac($_REQUEST)) {
+    // do all the good stuff
+}
+</code></pre>
+
+<p>All message-specific content is sent as a JSON object in request parameter <code class="prettyprint">json</code> and the message authentication code (MAC) is sent in request parameter <code class="prettyprint">mac</code>. </p>
+
+<p>The MAC is composed as follows: </p>
+
+<p><code>UPPERCASE(HEX(SHA-512(string(JSON) + string(Secret Key))))</code>  </p>
+
+<p>So to validate the message authenticy compose the MAC based on the received &lsquo;json&rsquo; and the SecretKey of your Shop, and compare the computed MAC with the one you recieved from request.</p>
+
+<h2 id="pagination">Pagination</h2>
+
+<p>TBC</p>
+
+<h1 id="shop">Shop</h1>
+
+<h2 id="shop-object">Shop object</h2>
+
+<p>A shop represents an entity that is collecting online payments.</p>
+
+<h2 id="get-configuration">get configuration</h2>
+<pre class="highlight php"><code>$myEnvironment=array(
+    'platform'=&gt;'magento 2.1',
+    'module'=&gt;'codejunkies 1.0.1');
+$request = array('environment' =&gt; json_encode($myEnvironment) );
+
+$shop = $MK-&gt;getShopConfig($request);
+</code></pre>
+<pre class="highlight shell"><code>
+</code></pre>
+
+<p>Retrieves configuration of the &#39;Shop&rsquo; as a json array that could be handy to cache on your server side. 
+(You could refresh this i.e. each hour or daily). </p>
+
+<p>Most importantly the returned data contains:</p>
+
+<ul>
+<li><strong>Payment methods available for the shop</strong> - 
+use this to render selection of payment methods in checkout dialog. The list may change over when payment channels are added or removed by MK. 
+Channels are ordered by country, so you can use the order for UI.
+We intend to make logos for the channels to be available on our server.</li>
+</ul>
+
+<p>As input we ask you to provide description of the integration environment - info about the e-commerce platform and integration module you are developing.
+We need this information for better problem resolution capability and for estimating imapct of changes in our API.</p>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /shop/configuration</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/shop.getconfig.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: <a href="#shop-object">Shop Object</a></p>
+
+<h2 id="get-account-statement">get account statement</h2>
+<pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
+$statement = $MK-&gt;getAccountStatement($request);
+</code></pre>
+<pre class="highlight shell"><code></code></pre>
+
+<p>Returns all movements on your account, including service fees, payouts etc. </p>
+
+<p>Parameters &#39;since&rsquo; and &#39;until&rsquo; can be expressed as date or timestamp. If no timezone is indicated then UTC is applied </p>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /shop/accountstatements</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/shop.accountstatement.php">Try in API tester</a></p>
+
+<p>See response example in right panel</p>
+<pre class="highlight json"><code><span class="err">accounting-record-example:</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nt">"created"</span><span class="p">:</span><span class="s2">"2016-09-29T08:44:38+0000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"amount"</span><span class="p">:</span><span class="mf">-0.06</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"type"</span><span class="p">:</span><span class="s2">"VAT"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"transaction"</span><span class="p">:</span><span class="s2">"87877"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"channel"</span><span class="p">:</span><span class="s2">"EE_SEB"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"balance_before"</span><span class="p">:</span><span class="mf">93.24000000000001</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"balance_after"</span><span class="p">:</span><span class="mf">93.18</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"merchant_reference"</span><span class="p">:</span><span class="s2">"16"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"original_amount"</span><span class="p">:</span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"exchange_rate"</span><span class="p">:</span><span class="mf">0.0</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="get-fees">get Fees</h2>
+
+<p>Returns accounting records that are not realted to transactions (monthly service fees).</p>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /shop/fees</code></p>
+<pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
+$statement = $MK-&gt;getShopFees($request);
+
+</code></pre>
+<pre class="highlight shell"><code>
+</code></pre>
+
+<p><a href="https://developer.maksekeskus.ee/shop.fees.php">Try in API tester </a></p>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th style="text-align: center">m/o</th>
+<th style="text-align: right">description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>since</td>
+<td style="text-align: center">m</td>
+<td style="text-align: right"></td>
+</tr>
+<tr>
+<td>until</td>
+<td style="text-align: center">o</td>
+<td style="text-align: right"></td>
+</tr>
+<tr>
+<td>page</td>
+<td style="text-align: center">o</td>
+<td style="text-align: right"></td>
+</tr>
+<tr>
+<td>per_page</td>
+<td style="text-align: center">o</td>
+<td style="text-align: right"></td>
+</tr>
+</tbody></table>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>Array of Fee Record objects
+&ldquo;`json
+response-record-example:
+    {
+        &quot;object&rdquo;:&ldquo;accounting&rdquo;,
+        &ldquo;amount&rdquo;:-20.0,
+        &ldquo;vat&rdquo;:-4.0,
+        &ldquo;id&rdquo;:&ldquo;8a1a459f-3368-41fc-963b-5215b18f8940&rdquo;,
+        &ldquo;created_at&rdquo;:&ldquo;2016-02-03T02:00:00+0000&rdquo;
+    }</p>
+
+<h4 id="fee-record-object">Fee record object</h4>
+
+<table><thead>
+<tr>
+<th>field</th>
+<th style="text-align: center">m/o</th>
+<th style="text-align: left">description / example</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>object</td>
+<td style="text-align: center">m</td>
+<td style="text-align: left">Object type =  <code class="prettyprint">accounting</code></td>
+</tr>
+<tr>
+<td>amount</td>
+<td style="text-align: center">m</td>
+<td style="text-align: left">-20.0</td>
+</tr>
+<tr>
+<td>vat</td>
+<td style="text-align: center">o</td>
+<td style="text-align: left">-4.0</td>
+</tr>
+<tr>
+<td>id</td>
+<td style="text-align: center">m</td>
+<td style="text-align: left"></td>
+</tr>
+<tr>
+<td>created_at</td>
+<td style="text-align: center">m</td>
+<td style="text-align: left">2016-02-03T02:00:00+0000</td>
+</tr>
+</tbody></table>
+<pre class="highlight plaintext"><code>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Transactions
+## Transaction object
+
+
+
+
+## create transaction
+
+```php
+$reqbody = array(
+        'transaction' =&gt; array(
+            'amount' =&gt; '12.95',
+            'currency' =&gt; 'EUR',
+            'reference' =&gt; 'order 123'
+            ),
+        'customer' =&gt; array(
+            'email' =&gt; 'mk.test@somedomain.xyz',
+            'ip' =&gt; '80.235.22.114',
+            'country' =&gt; 'ee',
+            'locale' =&gt; 'et'
+            )
+        );
+
+$transaction = $MK-&gt;createTransaction($_POST);
+</code></pre>
+
+<p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls managable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /transactions</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/transaction.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+<pre class="highlight json"><code><span class="err">response-example:</span><span class="w">
+</span><span class="p">{</span><span class="w">
+    </span><span class="nt">"amount"</span><span class="p">:</span><span class="mf">12.95</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"currency"</span><span class="p">:</span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"object"</span><span class="p">:</span><span class="s2">"transaction"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"CREATED"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"reference"</span><span class="p">:</span><span class="s2">"123abc"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"customer"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"object"</span><span class="p">:</span><span class="s2">"customer"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"mk.test@maksekeskus.ee"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"locale"</span><span class="p">:</span><span class="s2">"et"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ip"</span><span class="p">:</span><span class="s2">"80.235.22.114"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"e8657258-b625-4e04-a85b-4b60ff4194ef"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"e8657258-b625-4e04-a85b-4b60ff4194ef"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"created_at"</span><span class="p">:</span><span class="s2">"2016-10-02T17:10:47+0000"</span><span class="p">,</span><span class="w">
+        </span><span class="nt">"ip_country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"type"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"method"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"_links"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"self"</span><span class="p">:{</span><span class="w">
+            </span><span class="nt">"href"</span><span class="p">:</span><span class="s2">"https://api-test.maksekeskus.ee/v1/transactions/b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nt">"Pay"</span><span class="p">:{</span><span class="w">
+            </span><span class="nt">"href"</span><span class="p">:</span><span class="s2">"https://api-test.maksekeskus.ee/v1/transactions/b2a42acd-18d5-46a1-a4b0-b231383fec1e/payments"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"created_at"</span><span class="p">:</span><span class="s2">"2016-10-02T17:10:47+0000"</span><span class="p">,</span><span class="w">
+    </span><span class="nt">"payment_methods"</span><span class="p">:{</span><span class="w">
+        </span><span class="nt">"banklinks"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"swedbank"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=EE_SWED&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"seb"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=EE_SEB&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"swedbank"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=LV_SWED&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"lv"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nt">"cards"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"visa"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"mastercard"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"maestro"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">],</span><span class="w">
+        </span><span class="nt">"other"</span><span class="p">:[</span><span class="w">
+            </span><span class="p">{</span><span class="w">
+                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"redirect"</span><span class="p">,</span><span class="w">
+                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/pay.html?trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<h2 id="get-transaction">get transaction</h2>
+<pre class="highlight php"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /transactions/{id}</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/transaction.get.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: <a href="#transaction-object">Transaction Object</a></p>
+
+<h2 id="get-transaction-statement">get transaction statement</h2>
+<pre class="highlight php"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /transactions/{id}/statement</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/transaction.statement.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: <a href="#transaction-object">Transaction Object</a></p>
+
+<h2 id="get-transaction-list">get transaction list</h2>
+<pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
+$transaction = $MK-&gt;getTransactions($request);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /transactions</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/transaction.list.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: array of <a href="#transaction-object">Transaction Objects</a></p>
+
+<h2 id="create-payment">create payment</h2>
+<pre class="highlight php"><code>$request = array(
+    'amount' =&gt; '4.12',
+    'currency' =&gt; 'EUR',
+    'token' =&gt; '6385f130-8e5a-409a-a88b-ac0eefe1467e'
+);
+
+$payment = $MK-&gt;createPayment($transaction_id, $request);
+</code></pre>
+
+<p>You create <code class="prettyprint">payment</code> in the flow of Recurring Credit Card Payment. 
+In context of bank-link payments flow the &#39;payment&rsquo; creation operation is irrelevant.  </p>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /transactions/{id}/payments</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/payment.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<h1 id="refunds">Refunds</h1>
+
+<h2 id="refund-object">refund object</h2>
+
+<h2 id="create-refund">create refund</h2>
+<pre class="highlight php"><code>$request = array(
+    'amount' =&gt; '4.12',
+    'comment' =&gt; 'broken package compensation'
+);
+
+$payment = $MK-&gt;createRefund($transaction_id, $request);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /transactions/{id}/refunds</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/refund.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<h2 id="get-refund">get refund</h2>
+<pre class="highlight php"><code>$payment = $MK-&gt;getRefund($refund_id);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /refunds/{$refund_id}</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/refund.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: <a href="#refund-object">Refund Object</a></p>
+
+<h2 id="gert-refun-list">gert refun list</h2>
+<pre class="highlight php"><code>$payment = $MK-&gt;getRefunds($refund_id);
+</code></pre>
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /refunds</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/refund.list.php">Try in API tester</a></p>
+
+<h4 id="http-response">HTTP RESPONSE</h4>
+
+<p>JSON: array of <a href="#refund-object">Refund Objects</a></p>
+
+<h1 id="destinations">Destinations</h1>
+
+<aside class="warning">using this api call is subject of monthly fee</aside>
+
+<h1 id="shipments">Shipments</h1>
+
+<aside class="warning">using this api call is subject of monthly fee</aside>
+
+<h2 id="create-shipments">create shipments</h2>
+
+<h2 id="create-labels">create labels</h2>

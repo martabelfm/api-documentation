@@ -1,0 +1,70 @@
+<h1 id="introduction">Introduction</h1>
+
+<p>Welcome!</p>
+
+<p>This is still under construction&hellip;.</p>
+
+<h1 id="getting-started">Getting Started</h1>
+
+<h2 id="create-account">Create account</h2>
+
+<p>Request us to create you an account in our Test Envirsonment so you could expolere and test your integration in full.<br>
+Send your request to: <a href="mailto:support@maksekeskus.ee">support@maksekeskus.ee</a></p>
+
+<p>We will create you a shop in our Test environment.<br>
+This is how you get you API keys for the integration.</p>
+
+<h2 id="sdk">SDK</h2>
+
+<p>We do have a small libabry for PHP available in <a href="https://github.com/maksekeskus/maksekeskus-php">github</a>.</p>
+
+<h2 id="return-urls">Return URLS</h2>
+
+<p>As you see in the basic flow description below, your shop is expected to accept few messages about payments from MK systems. The messages may arrive in-band (from user browser) or dierectly from MK server to your e-shop server (M2M).</p>
+
+<p><strong>There are 2 messages:</strong></p>
+
+<ul>
+<li><code class="prettyprint">payment_return</code> message</li>
+<li><code class="prettyprint">token_return</code> message - used for card payments</li>
+</ul>
+
+<p>The shop should implement following <strong>entry-points</strong> where the user (and the messages) can be sent:</p>
+
+<ul>
+<li><code class="prettyprint">return_url</code> - main interface, </li>
+<li><code class="prettyprint">cancel_url</code> - optional, used when user deliberately cancels the payment in the channel </li>
+<li><code class="prettyprint">notification_url</code> - this is where M2M messagess are sent (processing time should be below 10s (http request timeout))</li>
+</ul>
+
+<p>The entry-points can be declared in your shop configuration, you can change them in Merchant Portal.<br>
+Alternatively, you can dynamically specify them for each transaction when you create the transaction (transaction_urls).</p>
+
+<h2 id="basic-flow">Basic Flow</h2>
+
+<ol>
+<li>shop checkout page presents selection of available payment methods (can be fetched from API)</li>
+<li>user selects a payment method and proceeds to pay</li>
+<li>shop server now creates the transaction in MK API and recieves back an array of urls pointing to payment channels</li>
+<li>depending on method the user selected, the e-shop server:
+
+<ol>
+<li>case banklink: redirects user to the banklink url supplied by the ransaction creation response</li>
+<li>case credit card: launches MK Credit Card Dialog by invoking checkout.js</li>
+</ol></li>
+<li>the user performs the payment in the channel</li>
+<li>returning from:
+
+<ol>
+<li>bank link: user is redirected to <code class="prettyprint">return_url</code> of the shop with <code class="prettyprint">payment_return</code> message</li>
+<li>credit card dialog: user is redirected back with <code class="prettyprint">token_return</code> message (POST to <code class="prettyprint">return_url</code>)</li>
+</ol></li>
+<li>the shop will verify the message and state of transaction within and display successful payment confirmation page (or goes back to payment method selection step)</li>
+<li>MK servers will send additional async message about the transaction status change to the shop server&rsquo; notification_url (see notifications)</li>
+</ol>
+
+<p><img alt="banklink payment diagram" src="http://developer.maksekeskus.ee/img/banklink-payment.svg" /></p>
+
+<p><img alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-3D-oneoff.svg" /></p>
+
+<p><img alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-no3D-oneoff.svg" /></p>
