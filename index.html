@@ -837,7 +837,22 @@ $reqbody = array(
         );
 $transaction = $MK-&gt;createTransaction($_POST);
 
-<h3>Example JSON</h3>
+<h3>Example JSON body minimal fields</h3>
+{
+  "transaction":{
+      "amount":"12.95",
+      "currency":"EUR",
+      "reference":"123abc",
+      "merchant_data":""
+  },
+  "customer":{
+      "email":"mk.test@maksekeskus.ee",
+      "ip":"80.235.22.114",
+      "country":"ee",
+      "locale":"et"
+  }
+}
+<h3>Example JSON all fields</h3>
 {
   "customer": {
     "country": "ee",
@@ -868,10 +883,112 @@ $transaction = $MK-&gt;createTransaction($_POST);
     }
   }
 }
+
+<h3>Example response body</h3>
+{
+  "_links": {
+      "Pay": {
+          "href": "https://api-test.maksekeskus.ee/v1/transactions/b8a8cf11-69dd-419b-ba34-1e27cdf4a7df/payments"
+      },
+      "self": {
+          "href": "https://api-test.maksekeskus.ee/v1/transactions/b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+      }
+  },
+  "amount": 12.95,
+  "country": "ee",
+  "created_at": "2019-08-01T12:53:41+0000",
+  "currency": "EUR",
+  "customer": {
+      "country": "ee",
+      "created_at": "2019-08-01T12:53:41+0000",
+      "email": "mk.test@maksekeskus.ee",
+      "id": "b206643d-2bf6-4d71-b56e-39a08e118ac0",
+      "ip": "80.235.22.114",
+      "ip_country": "ee",
+      "locale": "et",
+      "name": "b206643d-2bf6-4d71-b56e-39a08e118ac0",
+      "object": "customer"
+  },
+  "id": "b8a8cf11-69dd-419b-ba34-1e27cdf4a7df",
+  "method": null,
+  "object": "transaction",
+  "payment_methods": {
+      "banklinks": [
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/swedbank.png",
+              "name": "swedbank",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_SWED&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/seb.png",
+              "name": "seb",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_SEB&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/lhv.png",
+              "name": "lhv",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_LHV&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/luminor.png",
+              "name": "nordea",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_NORDEA&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/coop.png",
+              "name": "krediidipank",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_KREDIIDI&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/pocopay.png",
+              "name": "pocopay",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_POCOPAY&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          },
+          {
+              "country": "ee",
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/liisi_ee.png",
+              "name": "liisi_ee",
+              "url": "https://payment-test.maksekeskus.ee/banklink.html?method=EE_LIISI_EE&trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          }
+      ],
+      "cards": [
+          {
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/visa.png",
+              "name": "visa"
+          },
+          {
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/mastercard.png",
+              "name": "mastercard"
+          },
+          {
+              "logo_url": "https://static-test.maksekeskus.ee/img/channel/lnd/maestro.png",
+              "name": "maestro"
+          }
+      ],
+      "cash": [],
+      "other": [
+          {
+              "name": "redirect",
+              "url": "https://payment-test.maksekeskus.ee/pay.html?trx=b8a8cf11-69dd-419b-ba34-1e27cdf4a7df"
+          }
+      ]
+  },
+  "recurring_required": false,
+  "reference": "123abc",
+  "status": "CREATED",
+  "type": null
+}
 </code></pre>
 
 <p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls managable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
 
+<p><b>Customer object</b></p>
 <table>
     <tbody>
     <tr>
@@ -895,89 +1012,82 @@ $transaction = $MK-&gt;createTransaction($_POST);
     <td>ISO 639-1 locale code <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">List of ISO 3166 country codes</a></td>
     </tr>
     <tr>
-    <td>ip</td>
+    <td><b>ip</b></td>
     <td>Yes</td>
     <td>Customer IP address.</td>
     </tr>
     </tbody>
   </table>
-  
+
+<p><b>Transaction object</b></p>
+<table>
+    <tbody>
+    <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>amount</td>
+    <td>Yes</td>
+    <td>Transaction amount</td>
+    </tr>
+    <tr>
+    <td>currency</td>
+    <td>Yes</td>
+    <td>Transaction currency</td>
+    </tr>
+    <tr>
+    <td>id</td>
+    <td>No</td>
+    <td>Transaction ID</td>
+    </tr>
+    <tr>
+    <td>merchant_data</td>
+    <td>No</td>
+    <td>Use this to pass additional data. It will be available in API and displayed in merchant portal but not in callback messages.</td>
+    </tr>
+    <tr>
+    <td>recurring_required</td>
+    <td>No</td>
+    <td>true/false. If true payment can be done only with recurring card payment.</td>
+    </tr>
+    <tr>
+    <td>reference</td>
+    <td>No</td>
+    <td>Set a reference for the transaction.</td>
+    </tr>
+    <tr>
+    <td>cancel_url, notification_url, return_url</td>
+    <td>No</td>
+    <td>Each shop has its set of urls managable in Mercant Portal under the API settings 
+        You can optionally over-ride these urls when creating the transaction 
+        It might be handy at some e-commerce platforms where otherwise it is difficult determine previous context (i.e. user language) 
+        Or situation when multiple develpers are working on integration of one shop on their local work stations.
+        
+        Be careful to provide correct urls, with protocol (i.e. https://myshop.com/returnhandler/). We reccommend to use POST method.
+        If already, then you have to specify full set - you can not pass just one of the 3 urls (though they can be equal)</td>
+    </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    </tr>
+    </tbody>
+    </table>
+    <!-- DivTable.com -->
 <h4 id="http-request">HTTP REQUEST</h4>
 
-<p><code class="prettyprint">POST /transactions</code></p>
+<p><code class="prettyprint">POST /v1/transactions</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.php">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
-<pre class="highlight example"><code><span class="err">response-example:</span><span class="w">
-</span><span class="p">{</span><span class="w">
-    </span><span class="nt">"amount"</span><span class="p">:</span><span class="mf">12.95</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"currency"</span><span class="p">:</span><span class="s2">"EUR"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"object"</span><span class="p">:</span><span class="s2">"transaction"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"status"</span><span class="p">:</span><span class="s2">"CREATED"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"reference"</span><span class="p">:</span><span class="s2">"123abc"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"customer"</span><span class="p">:{</span><span class="w">
-        </span><span class="nt">"object"</span><span class="p">:</span><span class="s2">"customer"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"email"</span><span class="p">:</span><span class="s2">"mk.test@maksekeskus.ee"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"locale"</span><span class="p">:</span><span class="s2">"et"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"ip"</span><span class="p">:</span><span class="s2">"80.235.22.114"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"e8657258-b625-4e04-a85b-4b60ff4194ef"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"e8657258-b625-4e04-a85b-4b60ff4194ef"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"created_at"</span><span class="p">:</span><span class="s2">"2016-10-02T17:10:47+0000"</span><span class="p">,</span><span class="w">
-        </span><span class="nt">"ip_country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"type"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"method"</span><span class="p">:</span><span class="kc">null</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"_links"</span><span class="p">:{</span><span class="w">
-        </span><span class="nt">"self"</span><span class="p">:{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="s2">"https://api-test.maksekeskus.ee/v1/transactions/b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="w">
-        </span><span class="p">},</span><span class="w">
-        </span><span class="nt">"Pay"</span><span class="p">:{</span><span class="w">
-            </span><span class="nt">"href"</span><span class="p">:</span><span class="s2">"https://api-test.maksekeskus.ee/v1/transactions/b2a42acd-18d5-46a1-a4b0-b231383fec1e/payments"</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-    </span><span class="p">},</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="s2">"b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"created_at"</span><span class="p">:</span><span class="s2">"2016-10-02T17:10:47+0000"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"payment_methods"</span><span class="p">:{</span><span class="w">
-        </span><span class="nt">"banklinks"</span><span class="p">:[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"swedbank"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=EE_SWED&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"seb"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=EE_SEB&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"ee"</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"swedbank"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/banklink.html?method=LV_SWED&amp;trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"country"</span><span class="p">:</span><span class="s2">"lv"</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">],</span><span class="w">
-        </span><span class="nt">"cards"</span><span class="p">:[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"visa"</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"mastercard"</span><span class="w">
-            </span><span class="p">},</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"maestro"</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">],</span><span class="w">
-        </span><span class="nt">"other"</span><span class="p">:[</span><span class="w">
-            </span><span class="p">{</span><span class="w">
-                </span><span class="nt">"name"</span><span class="p">:</span><span class="s2">"redirect"</span><span class="p">,</span><span class="w">
-                </span><span class="nt">"url"</span><span class="p">:</span><span class="s2">"https://payment-test.maksekeskus.ee/pay.html?trx=b2a42acd-18d5-46a1-a4b0-b231383fec1e"</span><span class="w">
-            </span><span class="p">}</span><span class="w">
-        </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
 
 <h2 id="get-transaction">Get transaction</h2>
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
