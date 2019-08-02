@@ -1477,57 +1477,131 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <pre class="highlight example"><code>
 
     <h3>Example request</h3>
-    {  
-      "credentials":[  
-         {  
-            "carrier":"PASTA_LV",
-            "username":"MKESKUS_TEST",
-            "password":"zdZdzNNTai"
-         }
+  {
+      "credentials":[
+          {
+              "carrier":"OMNIVA",
+              "username":"45041",
+              "password":"x1bcN0x0"
+          }
       ],
-      "orders":[  
-         {  
-            "orderId":"order 12345",
-            "carrier":"SMARTPOST",
-            "destination":{  
-               "destinationId":"101"
-            },
-            "recipient":{  
-               "name":"Testi Robot",
-               "phone":"37258875115",
-               "email":"mk.test@maksekeskus.ee"
-            },
-            "sender":{  
-               "name":"myTestShop.com",
-               "phone":"+37258875115",
-               "email":"support@mytestshop.com",
-               "postalCode":"69400"
-            },
-            "shipmentId":"7471100008440615"
-         },
-         {  
-            "orderId":"order 12346",
-            "carrier":"OMNIVA",
-            "destination":{  
-               "destinationId":"96033"
-            },
-            "recipient":{  
-               "name":"Testi Robot",
-               "phone":"37258875115",
-               "email":"mk.test@maksekeskus.ee"
-            },
-            "sender":{  
-               "name":"myTestShop.com",
-               "phone":"37258875115",
-               "email":"support@mytestshop.com",
-               "postalCode":"69400"
-            },
-            "shipmentId":"CE441412466EE"
-         }
+      "orders":[
+          {
+              "orderId":"order 12346",
+              "carrier":"OMNIVA",
+              "destination":{
+                  "destinationId":"9950"
+              },
+              "recipient":{
+                  "name":"Test Robot",
+                  "phone":"37258875115",
+                  "email":"mk.test@maksekeskus.ee"
+              },
+              "sender":{
+                  "name":"myTestShop.com",
+                  "phone":"37258875115",
+                  "email":"support@mytestshop.com",
+                  "city":"Riga",
+                  "street":"brivibas iela",
+                  "country":"LV",
+                  "postalCode":"911"
+              },
+              "shipmentId":"CE441412466EE"
+          }
       ],
       "printFormat":"A4"
-   }
+  }
   </code></pre>
+
+  <p><b>Credentials object</b></p>
+  <table>
+      <tbody>
+      <tr>
+      <td><b>Field</b></td>
+      <td><b>Required</b></td>
+      <td><b>Description</b></td>
+      </tr>
+      <tr>
+      <td>carrier</td>
+      <td>Yes</td>
+      <td>Potential values: 
+          OMNIVA,
+          SMARTPOST,
+          DPD,
+          OMNIVA_LV,
+          PASTA_LV,
+          OMNIVA_LT</td>
+      </tr>
+      <tr>
+      <td>username</td>
+      <td>Yes</td>
+      <td>Your carrier username</td>
+      </tr>
+      <tr>
+      <td>password</td>
+      <td>Yes</td>
+      <td>Your carrier password</td>
+      </tr>
+      </tbody>
+  </table>
+  
+  <p><b>Orders object</b></p>
+  <table>
+      <tbody>
+      <tr>
+      <td><b>Field</b></td>
+      <td><b>Required</b></td>
+      <td><b>Description</b></td>
+      </tr>
+      <tr>
+      <td>orderId</td>
+      <td>Yes</td>
+      <td>Order id which to create the shipment for.</td>
+      </tr>
+      <tr>
+      <td>carrier</td>
+      <td>Yes</td>
+      <td>Potential values: 
+          OMNIVA,
+          SMARTPOST,
+          DPD,
+          OMNIVA_LV,
+          PASTA_LV,
+          OMNIVA_LT</td>
+      </tr>
+      <tr>
+      <td>destinationId</td>
+      <td>Use this with ID or </td>
+      <td>DestinationID from <a href="#get-shipment-destinations">Get shipment destination</a></td>
+      </tr>
+      <tr>
+      <td>destination(postalCode, country, county, city, street)</td>
+      <td>Use this or destinationId</td>
+      <td>Destinations postal code, country(<a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">List of ISO 3166 country codes</a>), county, city and street. </td>
+      </tr>
+      <tr>
+      <td>Recipient(name, phone, email)</td>
+      <td>Yes</td>
+      <td>Recipient name, phone number and email address</td>
+      </tr>
+      <tr>
+      <td>Sender(name, phone, email, postalCode)</td>
+      <td>Yes</td>
+      <td>Senders name, phone number, email address and postalcode.</td>
+      </tr>
+      <tr>
+      <td>shipmentId</td>
+      <td>Yes</td>
+      <td>shipmentId from <a href="#create-shipments">Create shipments</a></td>
+      </tr>
+      <tr>
+      <td>printFormat</td>
+      <td>Yes</td>
+      <td>Page size</td>
+      </tr>
+      
+      </tbody>
+  </table>
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
