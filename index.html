@@ -117,10 +117,39 @@
         
           <h1 id="introduction">Introduction and overview</h1>
 
-<p>Welcome! Below you can find a quick overview of the Makecommerce ecosystem which will be explained more thoroughly in this page.
+<p>Welcome! In this page you can find a quick overview of the Makecommerce ecosystem which will be explained more thoroughly in this page.
   <br>
   <br>
-  This page should be used together with <a href="https://developer.maksekeskus.ee/intro.php" target="_blank">API tester</a>
+  MakeCommerce's developer portal is divided into 5 sections. 
+  <table>
+      <tbody>
+      <tr>
+        <td><b>Section</b></td>
+      <td><b>Description</b></td>
+      </tr>
+      <tr>
+      <td>API Docs</td>
+      <td>API Docs is the starting point for using MakeCommerce ecosystem as a developer. This page has all the info gathered together or it's linking you to the right resource.</td>
+      </tr>
+      <tr>
+      <td><a href="https://developer.maksekeskus.ee/intro.php" target="_blank">API Tester</a></td>
+      <td>API Tester can be used to try out our REST API endpoints. After reading API Docs this is the place to go try out some requests. We have made a small tutorial to get you started with the API tester: <a href="#how-to-use-our-api-tester">"How to use our API Tester?"</a></td>
+      </tr>
+      <tr>
+      <td><a href="https://developer.maksekeskus.ee/redirect.php" target="_blank">Payment Gateway</a></td>
+      <td>Duplicate?</td>
+      </tr>
+      <tr>
+      <td><a href="https://developer.maksekeskus.ee/checkout.php" target="_blank">Credit Card</a></td>
+      <td>Whole section for Credit Card flow. There you can find flow descriptions, test cards and some code snippets.</td>
+      </tr>
+      <tr>
+      <td><a href="https://developer.maksekeskus.ee/messages.php" target="_blank">Notifications</a></td>
+      <td>&nbsp;</td>
+      </tr>
+      </tbody>
+      </table>
+
 </p>
 <h2 id="first-steps">First steps</h2>
 <p>
@@ -1086,8 +1115,6 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <p><code class="prettyprint">POST /v1/transactions</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.php">Try in API tester</a></p>
-
-<h4 id="http-response">HTTP RESPONSE</h4>
 
 <h2 id="get-transaction">Get transaction</h2>
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
