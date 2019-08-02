@@ -778,7 +778,7 @@ $statement = $MK-&gt;getAccountStatement($request);
 <p><code class="prettyprint">GET /v1/shop/accountstatements/camt053?since=2019-04-10%2B0300&until=2019-04-10%2B0300</code></p>
 
 
-<h2 id="get-fees">Get Fees</h2>
+<h2 id="get-fees">Get fees</h2>
 
 <p>Returns accounting records that are not realted to transactions (monthly service fees).</p>
 
@@ -1109,7 +1109,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
     </tr>
     </tbody>
     </table>
-    <!-- DivTable.com -->
+
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /v1/transactions</code></p>
@@ -1231,6 +1231,8 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <h1 id="destinations">Destinations</h1>
 
+<aside class="warning">Using this api call is subject of monthly fee</aside>
+
 <h2 id="get-shipment-destinations">Get shipment destinations</h2>
 <pre class="highlight example"><code>
     <h3>Example request</h3>
@@ -1281,8 +1283,6 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
   ]
     </code></pre>
 
-<aside class="warning">Using this api call is subject of monthly fee</aside>
-
 <table>
     <tbody>
     <tr>
@@ -1312,23 +1312,229 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     </tr>
     </tbody>
     </table>
-    <!-- DivTable.com -->
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /v1/shipments/destinations</code></p>
 
+<p><a href="https://developer.maksekeskus.ee/destinations.php" target="_blank">Try in API tester</a></p>
 
 <h1 id="shipments">Shipments</h1>
 
-<aside class="warning">using this api call is subject of monthly fee</aside>
+<aside class="warning">Using this api call is subject of monthly fee</aside>
 
-<h2 id="create-shipments">create shipments</h2>
+<h2 id="create-shipments">Create shipments</h2>
+<pre class="highlight example"><code>
 
-<h2 id="create-labels">create labels</h2>
+  <h3>Example request</h3>
+  {
+      "credentials":[
+          {
+              "carrier":"SMARTPOST",
+              "username":"your_username_smartpost",
+              "password":"your_psw_smartpost"
+          },
+          {
+              "carrier":"OMNIVA",
+              "username":"your_uername_omniva",
+              "password":"your_psw_omniva"
+          },
+          {
+              "carrier":"DPD",
+              "username":"your_uername_dpd",
+              "password":"your_psw_dpd"
+          }
+      ],
+      "orders":[
+          {
+              "orderId":"order 12345",
+              "carrier":"SMARTPOST",
+              "destination":{
+                  "destinationId":"101"
+              },
+              "recipient":{
+                  "name":"Test Robot",
+                  "phone":"37258875115",
+                  "email":"mk.test@maksekeskus.ee"
+              },
+              "sender":{
+                  "name":"myTestShop.com",
+                  "phone":"+37258875115",
+                  "email":"support@mytestshop.com",
+                  "postalCode":"69400"
+              }
+          },
+          {
+              "orderId":"order 12346",
+              "carrier":"OMNIVA",
+              "destination": {
+                "postalCode": "96047",
+                "country": "EE",
+                "county": "Harjumaa",
+                "city": "Tallinn",
+                "street": "Vana Lõuna 12"
+              },
+              "recipient":{
+                  "name":"Test Robot",
+                  "phone":"37258875115",
+                  "email":"mk.test@maksekeskus.ee"
+              },
+              "sender":{
+                  "name":"myTestShop.com",
+                  "phone":"37258875115",
+                  "email":"support@mytestshop.com",
+                  "postalCode":"69400"
+              }
+          }
+      ]
+  }
+</code></pre>
+<p><b>Credentials object</b></p>
+<table>
+    <tbody>
+    <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>carrier</td>
+    <td>Yes</td>
+    <td>Potential values: 
+        OMNIVA,
+        SMARTPOST,
+        DPD,
+        OMNIVA_LV,
+        PASTA_LV,
+        OMNIVA_LT</td>
+    </tr>
+    <tr>
+    <td>username</td>
+    <td>Yes</td>
+    <td>Your carrier username</td>
+    </tr>
+    <tr>
+    <td>password</td>
+    <td>Yes</td>
+    <td>Your carrier password</td>
+    </tr>
+    </tbody>
+</table>
 
+<p><b>Orders object</b></p>
+<table>
+    <tbody>
+    <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>orderId</td>
+    <td>Yes</td>
+    <td>Order id which to create the shipment for.</td>
+    </tr>
+    <tr>
+    <td>carrier</td>
+    <td>Yes</td>
+    <td>Potential values: 
+        OMNIVA,
+        SMARTPOST,
+        DPD,
+        OMNIVA_LV,
+        PASTA_LV,
+        OMNIVA_LT</td>
+    </tr>
+    <tr>
+    <td>destinationId</td>
+    <td>Use this with ID or </td>
+    <td>DestinationID from <a href="#get-shipment-destinations">Get shipment destination</a></td>
+    </tr>
+    <tr>
+    <td>destination(postalCode, country, county, city, street)</td>
+    <td>Use this or destinationId</td>
+    <td>Destinations postal code, country(<a href="https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes" target="_blank">List of ISO 3166 country codes</a>), county, city and street. </td>
+    </tr>
+    <tr>
+    <td>Recipient(name, phone, email)</td>
+    <td>Yes</td>
+    <td>Recipient name, phone number and email address</td>
+    </tr>
+    <tr>
+    <td>Sender(name, phone, email, postalCode)</td>
+    <td>Yes</td>
+    <td>Senders name, phone number, email address and postalcode.</td>
+    </tr>
+    </tbody>
+</table>
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /v1/shipments</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/shipments.php" target="_blank">Try in API tester</a></p>
+
+<h2 id="create-labels">Create labels</h2>
+<pre class="highlight example"><code>
+
+    <h3>Example request</h3>
+    {  
+      "credentials":[  
+         {  
+            "carrier":"PASTA_LV",
+            "username":"MKESKUS_TEST",
+            "password":"zdZdzNNTai"
+         }
+      ],
+      "orders":[  
+         {  
+            "orderId":"order 12345",
+            "carrier":"SMARTPOST",
+            "destination":{  
+               "destinationId":"101"
+            },
+            "recipient":{  
+               "name":"Testi Robot",
+               "phone":"37258875115",
+               "email":"mk.test@maksekeskus.ee"
+            },
+            "sender":{  
+               "name":"myTestShop.com",
+               "phone":"+37258875115",
+               "email":"support@mytestshop.com",
+               "postalCode":"69400"
+            },
+            "shipmentId":"7471100008440615"
+         },
+         {  
+            "orderId":"order 12346",
+            "carrier":"OMNIVA",
+            "destination":{  
+               "destinationId":"96033"
+            },
+            "recipient":{  
+               "name":"Testi Robot",
+               "phone":"37258875115",
+               "email":"mk.test@maksekeskus.ee"
+            },
+            "sender":{  
+               "name":"myTestShop.com",
+               "phone":"37258875115",
+               "email":"support@mytestshop.com",
+               "postalCode":"69400"
+            },
+            "shipmentId":"CE441412466EE"
+         }
+      ],
+      "printFormat":"A4"
+   }
+  </code></pre>
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
+
+<p><a href="https://developer.maksekeskus.ee/labels.php" target="_blank">Try in API tester</a></p>
           
-      </div>
+</div>
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="example">Examples</a>
