@@ -1248,7 +1248,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
       ]
     }
 
-    <h3>Example response</h3>
+    <h3>Example response body</h3>
   [
     {
         "carrier": "OMNIVA",
@@ -1388,6 +1388,23 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
           }
       ]
   }
+
+  <h3>Example response body</h3>
+  {
+    "manifests":[
+        "https://static-test.maksekeskus.ee/mf/201908050iAIhZTAw5y8MNkG0muTz4o1nqSI19nt.pdf"
+    ],
+    "shipments":[
+        {
+            "orderId":"order 12346",
+            "shipmentId":"CC320669628EE"
+        },
+        {
+            "orderId":"order 12348",
+            "shipmentId":"CC320669631EE"
+        }
+    ]
+}
 </code></pre>
 <p><b>Credentials object</b></p>
 <table>
@@ -1511,6 +1528,11 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
       ],
       "printFormat":"A4"
   }
+
+  <h3>Example response body</h3>
+  {
+    "labelUrl":"https://static-test.maksekeskus.ee/lbl/20190805tshY9Vf3Q6OO2PR1UJByFShffc6DeWhi.pdf"
+  }
   </code></pre>
 
   <p><b>Credentials object</b></p>
@@ -1607,7 +1629,78 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/labels.php" target="_blank">Try in API tester</a></p>
-          
+
+<h1 id="simple-checkout">Simple checkout</h1>
+<h2 id="create-cart">Create cart</h2>
+<pre class="highlight example"><code>
+
+  <h3>Example request</h3>
+{
+  "amount": "15",
+  "cartRef": "refNr",
+  "currency": "EUR",
+  "locale": "ET",
+  "customerData": {
+    "email": "test@mk.ee",
+    "invoiceAddress": {
+      "city": "Tallinn",
+      "country": "EE",
+      "county": "Harjumaa",
+      "firstname": "Eesnimi",
+      "lastname": "Perenimi",
+      "legalName": "OÜ",
+      "postalCode": "123123",
+      "registryCode": "123456",
+      "street1": "Karamelli",
+      "street2": "3",
+      "vatNum": "23123"
+    },
+    "name": "Eesnimi",
+    "phone": "55555555",
+    "shipmentAddress": {
+      "city": "Tallinn",
+      "country": "EE",
+      "county": "Harjumaa",
+      "firstname": "Eesnimi",
+      "lastname": "Perenimi",
+      "postalCode": "123456",
+      "street1": "Karamelli",
+      "street2": "3"
+    }
+  },
+  "pluginUrls": {
+    "calculateShipment": "YourCalculateShipmentEndpoint",
+    "cartToOrder": "YourCartToOrderEndpoint",
+    "tos": "YourTosUrl"
+  },
+  "shipmentMethods": [
+    {
+      "amount": "5",
+      "carrier": "OMNIVA",
+      "countries": [
+        "EE",
+        "LT"
+      ],
+      "methodId": "5",
+      "name": "Parcel Machine",
+      "type": "APT"
+    }
+  ],
+  "shopId": "f0f355f0-d464-43e5-85da-a8eebb57327a",
+  "sourceCountry": "EE"
+}
+<h3>Example response body</h3>
+{
+  "_links": {
+      "self": {
+          "href": "https://api-test.maksekeskus.ee/v1/carts/6c747f64-2a4b-49a6-a1e1-d428454492a5"
+      }
+  },
+  "id": "6c747f64-2a4b-49a6-a1e1-d428454492a5",
+  "object": "cart",
+  "scoUrl": "https://payment-test.maksekeskus.ee/sco.html?id=6c747f64-2a4b-49a6-a1e1-d428454492a5"
+}
+  </code></pre>
 </div>
       <div class="dark-box">
           <div class="lang-selector">
