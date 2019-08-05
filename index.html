@@ -648,6 +648,10 @@ $shop = $MK-&gt;getShopConfig($request);
 <pre class="highlight example"><code>
 </code></pre>
 
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /v1/shop/configuration</code></p>
+
 <p>Retrieves configuration of the &#39;Shop&rsquo; as a json array that could be handy to cache on your server side. 
 (You could refresh this i.e. each hour or daily). </p>
 
@@ -663,11 +667,7 @@ We intend to make logos for the channels to be available on our server.</li>
 <p>As input we ask you to provide description of the integration environment - info about the e-commerce platform and integration module you are developing.
 We need this information for better problem resolution capability and for estimating imapct of changes in our API.</p>
 
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">GET /v1/shop/configuration</code></p>
-
-<p><a href="https://developer.maksekeskus.ee/shop.getconfig.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/shop.getconfig.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -723,7 +723,11 @@ $statement = $MK-&gt;getAccountStatement($request);
 ]
 </code></pre>
 <pre class="highlight example"><code></code></pre>
+<h4 id="http-request">HTTP REQUEST</h4>
 
+<p><code class="prettyprint">GET /v1/shop/accountstatements</code></p>
+<p><code class="prettyprint">GET /v1/shop/accountstatements/xml</code></p>
+<p><code class="prettyprint">GET /v1/shop/accountstatements/camt053</code></p>
 <p><b>Either since or payout_id is required other fields are voluntary. <br>
   For XML and camt053 format endpoint until parameter is also required!</b></p>
 <table>
@@ -759,13 +763,6 @@ $statement = $MK-&gt;getAccountStatement($request);
 
 <p>Parameters &#39;since&rsquo; and &#39;until&rsquo; can be expressed as date or timestamp. If no timezone is indicated then UTC is applied </p>
 
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">GET /v1/shop/accountstatements</code></p>
-<p><code class="prettyprint">GET /v1/shop/accountstatements/xml</code></p>
-<p><code class="prettyprint">GET /v1/shop/accountstatements/camt053</code></p>
-
-<p><a href="https://developer.maksekeskus.ee/shop.accountstatement.php">Try in API tester</a></p>
 
 <p>See response example in right panel</p>
 
@@ -777,12 +774,13 @@ $statement = $MK-&gt;getAccountStatement($request);
 <p><code class="prettyprint">GET /v1/shop/accountstatements/xml?since=2019-04-10%2B0300&until=2019-04-10%2B0300</code></p>
 <p><code class="prettyprint">GET /v1/shop/accountstatements/camt053?since=2019-04-10%2B0300&until=2019-04-10%2B0300</code></p>
 
+<p><a href="https://developer.maksekeskus.ee/shop.accountstatement.php" target="_blank">Try in API tester</a></p>
 
 <h2 id="get-fees">Get fees</h2>
+<h4 id="http-request">HTTP REQUEST</h4>
+<p><code class="prettyprint">GET /v1/shop/fees</code></p>
 
 <p>Returns accounting records that are not realted to transactions (monthly service fees).</p>
-
-<p><code class="prettyprint">GET /v1/shop/fees</code></p>
 <pre class="highlight example"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $statement = $MK-&gt;getShopFees($request);
 </code></pre>
@@ -814,8 +812,6 @@ $statement = $MK-&gt;getShopFees($request);
 ]
     </code></pre>
 
-<p><a href="https://developer.maksekeskus.ee/shop.fees.php">Try in API tester </a></p>
-
 <table>
   <tbody>
   <tr>
@@ -845,6 +841,8 @@ $statement = $MK-&gt;getShopFees($request);
   </tr>
   </tbody>
   </table>
+
+  <p><a href="https://developer.maksekeskus.ee/shop.fees.php" target="_blank">Try in API tester </a></p>
 
 <h4 id="http-request">HTTP REQUEST EXAMPLE</h4>
 <p><code class="prettyprint">GET /v1/shop/fees?since=2019-04-10%2B0300</code></p>
@@ -1016,6 +1014,10 @@ $transaction = $MK-&gt;createTransaction($_POST);
 }
 </code></pre>
 
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /v1/transactions</code></p>
+
 <p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls managable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
 
 <p><b>Customer object</b></p>
@@ -1111,15 +1113,16 @@ $transaction = $MK-&gt;createTransaction($_POST);
     </tbody>
     </table>
 
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">POST /v1/transactions</code></p>
-
-<p><a href="https://developer.maksekeskus.ee/transaction.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/transaction.php" target="_blank">Try in API tester</a></p>
 
 <h2 id="get-transaction">Get transaction</h2>
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
 </code></pre>
+
+
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">GET /v1/transactions/{id}</code></p>
 
 <table>
   <tbody>
@@ -1134,12 +1137,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
   </tbody>
 </table>
 
-
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">GET /v1/transactions/{id}</code></p>
-
-<p><a href="https://developer.maksekeskus.ee/transaction.get.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/transaction.get.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1148,7 +1146,9 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <h2 id="get-transaction-statement">Get transaction statement</h2>
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
 </code></pre>
+<h4 id="http-request">HTTP REQUEST</h4>
 
+<p><code class="prettyprint">GET /v1/transactions/{id}/statement</code></p>
 <table>
   <tbody>
   <tr>
@@ -1162,11 +1162,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
   </tbody>
 </table>
 
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">GET /v1/transactions/{id}/statement</code></p>
-
-<p><a href="https://developer.maksekeskus.ee/transaction.statement.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/transaction.statement.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1224,7 +1220,7 @@ $transaction = $MK-&gt;getTransactions($request);
   </tbody>
   </table>
 
-<p><a href="https://developer.maksekeskus.ee/transaction.list.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/transaction.list.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1243,15 +1239,14 @@ $transaction = $MK-&gt;getTransactions($request);
 
 $payment = $MK-&gt;createPayment($transaction_id, $request);
 </code></pre>
-
-<p>You create <code class="prettyprint">payment</code> in the flow of Recurring Credit Card Payment. 
-In context of bank-link payments flow the &#39;payment&rsquo; creation operation is irrelevant.  </p>
-
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /transactions/{id}/payments</code></p>
 
-<p><a href="https://developer.maksekeskus.ee/payment.php">Try in API tester</a></p>
+<p>You create <code class="prettyprint">payment</code> in the flow of Recurring Credit Card Payment. 
+In context of bank-link payments flow the &#39;payment&rsquo; creation operation is irrelevant.  </p>
+
+<p><a href="https://developer.maksekeskus.ee/payment.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1271,7 +1266,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <p><code class="prettyprint">POST /transactions/{id}/refunds</code></p>
 
-<p><a href="https://developer.maksekeskus.ee/refund.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/refund.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1283,7 +1278,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <p><code class="prettyprint">GET /v1/refunds/{$refund_id}</code></p>
 
-<p><a href="https://developer.maksekeskus.ee/refund.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/refund.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1297,7 +1292,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <p><code class="prettyprint">GET /v1/refunds</code></p>
 
-<p><a href="https://developer.maksekeskus.ee/refund.list.php">Try in API tester</a></p>
+<p><a href="https://developer.maksekeskus.ee/refund.list.php" target="_blank">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
@@ -1356,7 +1351,9 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     }
   ]
     </code></pre>
+    <h4 id="http-request">HTTP REQUEST</h4>
 
+    <p><code class="prettyprint">POST /v1/shipments/destinations</code></p>
 <table>
     <tbody>
     <tr>
@@ -1386,10 +1383,6 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     </tr>
     </tbody>
     </table>
-
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">POST /v1/shipments/destinations</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/destinations.php" target="_blank">Try in API tester</a></p>
 
@@ -1480,6 +1473,9 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     ]
 }
 </code></pre>
+<h4 id="http-request">HTTP REQUEST</h4>
+
+<p><code class="prettyprint">POST /v1/shipments</code></p>
 <p><b>Credentials object</b></p>
 <table>
     <tbody>
@@ -1558,9 +1554,6 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     </tr>
     </tbody>
 </table>
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">POST /v1/shipments</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/shipments.php" target="_blank">Try in API tester</a></p>
 
@@ -1608,7 +1601,9 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     "labelUrl":"https://static-test.maksekeskus.ee/lbl/20190805tshY9Vf3Q6OO2PR1UJByFShffc6DeWhi.pdf"
   }
   </code></pre>
+  <h4 id="http-request">HTTP REQUEST</h4>
 
+  <p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
   <p><b>Credentials object</b></p>
   <table>
       <tbody>
@@ -1698,9 +1693,6 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
       
       </tbody>
   </table>
-<h4 id="http-request">HTTP REQUEST</h4>
-
-<p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
 
 <p><a href="https://developer.maksekeskus.ee/labels.php" target="_blank">Try in API tester</a></p>
 
@@ -1708,72 +1700,102 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <h2 id="create-cart">Create cart</h2>
 <pre class="highlight example"><code>
   <h3>Example request</h3>
-{
-  "amount": "15",
-  "cartRef": "refNr",
-  "currency": "EUR",
-  "locale": "ET",
-  "customerData": {
-    "email": "test@mk.ee",
-    "invoiceAddress": {
-      "city": "Tallinn",
-      "country": "EE",
-      "county": "Harjumaa",
-      "firstname": "Eesnimi",
-      "lastname": "Perenimi",
-      "legalName": "OÜ",
-      "postalCode": "123123",
-      "registryCode": "123456",
-      "street1": "Karamelli",
-      "street2": "3",
-      "vatNum": "23123"
+  {
+    "cartRef": "cart 1256",
+    "pluginUrls": {
+      "cartToOrder": "https://developer.maksekeskus.ee/cartToOrder.php",
+      "calculateShipment": "http://developer.maksekeskus.ee/calculateshipment",
+      "tos": "http://developer.maksekeskus.ee/tos"
     },
-    "name": "Eesnimi",
-    "phone": "55555555",
-    "shipmentAddress": {
-      "city": "Tallinn",
-      "country": "EE",
-      "county": "Harjumaa",
-      "firstname": "Eesnimi",
-      "lastname": "Perenimi",
-      "postalCode": "123456",
-      "street1": "Karamelli",
-      "street2": "3"
-    }
-  },
-  "pluginUrls": {
-    "calculateShipment": "YourCalculateShipmentEndpoint",
-    "cartToOrder": "YourCartToOrderEndpoint",
-    "tos": "YourTosUrl"
-  },
-  "shipmentMethods": [
-    {
-      "amount": "5",
-      "carrier": "OMNIVA",
-      "countries": [
-        "EE",
-        "LT"
-      ],
-      "methodId": "5",
-      "name": "Parcel Machine",
-      "type": "APT"
-    }
-  ],
-  "shopId": "f0f355f0-d464-43e5-85da-a8eebb57327a",
-  "sourceCountry": "EE"
-}
+    "amount": "1.29",
+    "currency": "EUR",
+    "sourceCountry": "EE",
+    "locale": "et",
+    "shipmentMethods": [
+      {
+        "countries": [
+          "EE"
+        ],
+        "carrier": "SMARTPOST",
+        "type": "APT",
+        "name": "SmartPOST pakiautomaat",
+        "methodId": "parcelmachine_smartpost:48",
+        "amount": "2.99"
+      },
+      {
+        "countries": [
+          "EE"
+        ],
+        "type": "OTH",
+        "name": "Tulen ise järgi",
+        "methodId": "local_pickup:57",
+        "amount": "0"
+      },
+      {
+        "countries": [
+          "EE"
+        ],
+        "type": "COU",
+        "name": "Kuidagi saadame su aadressile (vbl kulleriga)",
+        "methodId": "flat_rate:59",
+        "amount": "15"
+      }
+    ]
+  }
 <h3>Example response body</h3>
 {
-  "_links": {
-      "self": {
-          "href": "https://api-test.maksekeskus.ee/v1/carts/6c747f64-2a4b-49a6-a1e1-d428454492a5"
+  "_links":{
+      "self":{
+          "href":"https://api-test.maksekeskus.ee/v1/carts/b6ae0a9f-f45e-4e82-9aec-2ab0bf29df61"
       }
   },
-  "id": "6c747f64-2a4b-49a6-a1e1-d428454492a5",
-  "object": "cart",
-  "scoUrl": "https://payment-test.maksekeskus.ee/sco.html?id=6c747f64-2a4b-49a6-a1e1-d428454492a5"
+  "id":"b6ae0a9f-f45e-4e82-9aec-2ab0bf29df61",
+  "object":"cart",
+  "scoUrl":"https://payment-test.maksekeskus.ee/sco.html?id=b6ae0a9f-f45e-4e82-9aec-2ab0bf29df61"
 }
   </code></pre>
+  <h4 id="http-request">HTTP REQUEST</h4>
+  <p><code class="prettyprint">POST /v1/carts</code></p>
+
+  <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
+  <table>
+    <tbody>
+    <tr>
+      <td><b>Field</b></td>
+      <td><b>Description</b></td>
+    </tr>
+    <tr>
+    <td>cartRef</td>
+    <td>Cart reference number or symbol.</td>
+    </tr>
+    <tr>
+    <td>pluginUrls</td>
+    <td>cartToOrder, calculateShipment and tos Urls. </td>
+    </tr>
+    <tr>
+    <td>amount</td>
+    <td>Amount of the transaction.</td>
+    </tr>
+    <tr>
+    <td>currency</td>
+    <td>Transaction currencry</td>
+    </tr>
+    <tr>
+    <td>sourceCountry</td>
+    <td>&nbsp;</td>
+    </tr>
+    <tr>
+    <td>locale</td>
+    <td>ISO 639-1 locale code <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">List of ISO 3166 country codes</a></td>
+    </tr>
+    <tr>
+    <td>shipmentMethods</td>
+    <td>Which shipment methods does this cart accept. Look at the example in the examples tab.</td>
+    </tr>
+    </tbody>
+    </table>
+
+    <p><a href="https://developer.maksekeskus.ee/cart.php" target="_blank">Try in API tester</a></p>
 </div>
       <div class="dark-box">
           <div class="lang-selector">
