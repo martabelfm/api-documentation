@@ -137,7 +137,7 @@
       </tr>
       <tr>
       <td><a href="https://developer.maksekeskus.ee/redirect.php" target="_blank">Payment Gateway</a></td>
-      <td>Duplicate?</td>
+      <td>Create a transaction and get redirected to payment gateway. </td>
       </tr>
       <tr>
       <td><a href="https://developer.maksekeskus.ee/checkout.php" target="_blank">Credit Card</a></td>
@@ -145,7 +145,7 @@
       </tr>
       <tr>
       <td><a href="https://developer.maksekeskus.ee/messages.php" target="_blank">Notifications</a></td>
-      <td>&nbsp;</td>
+      <td>Section about notifications.</td>
       </tr>
       </tbody>
       </table>
@@ -1219,7 +1219,7 @@ $transaction = $MK-&gt;getTransactions($request);
   </tr>
   <tr>
   <td>until</td>
-  <td>Until which date you wish to query account statements.</td>
+  <td>Until which date you wish to query account transactions.</td>
   </tr>
   <tr>
   <td>completed_since</td>
@@ -1280,10 +1280,7 @@ In context of bank-link payments flow the &#39;payment&rsquo; creation operation
 
 <p><a href="https://developer.maksekeskus.ee/payment.php" target="_blank">Try in API tester</a></p>
 
-<h4 id="http-response">HTTP RESPONSE</h4>
-
 <h1 id="refund">Refund</h1>
-<h2 id="refund-object">Refund object</h2>
 
 <h2 id="create-refund">Create refund</h2>
 <pre class="highlight example"><code>$request = array(
@@ -1292,15 +1289,51 @@ In context of bank-link payments flow the &#39;payment&rsquo; creation operation
 );
 
 $payment = $MK-&gt;createRefund($transaction_id, $request);
+
+<h3>Example request body</h3>
+{
+  "amount":"5",
+  "comment":"Refund reason",
+  "email":""
+}
 </code></pre>
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">POST /transactions/{id}/refunds</code></p>
 
+<p>Note that you should verify state of the refund in the response. You may be returned 200 response (resource created) but it's state may be FAILED. 
+  While the refund is in state SENT its amountt is reserved on shop's account. 
+  You need sufficent balance on the account to make refunds. Take a look at the refund states here: <a href="#refund-states">Refund states</a></p>
+
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Required</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>amount</td>
+  <td>Yes</td>
+  <td>Amount of the refund.</td>
+  </tr>
+  <tr>
+  <td>comment</td>
+  <td>Yes</td>
+  <td>Comment for the refund.</td>
+  </tr>
+  <tr>
+  <td>email</td>
+  <td>Only for finnish bank-link payments.</td>
+  <td>Email of the original payer.</td>
+  </tr>
+  </tbody>
+  </table>
+  
+
 <p><a href="https://developer.maksekeskus.ee/refund.php" target="_blank">Try in API tester</a></p>
 
-<h4 id="http-response">HTTP RESPONSE</h4>
 
 <h2 id="get-refund">Get refund</h2>
 <pre class="highlight example"><code>$payment = $MK-&gt;getRefund($refund_id);
@@ -1309,12 +1342,20 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">GET /v1/refunds/{$refund_id}</code></p>
-
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>id</td>
+  <td>Refund ID you get from here: <a href="#create-refund">Create refund</a></td>
+  </tr>
+  </tbody>
+</table>
 <p><a href="https://developer.maksekeskus.ee/refund.php" target="_blank">Try in API tester</a></p>
 
-<h4 id="http-response">HTTP RESPONSE</h4>
-
-<p>JSON: <a href="#refund-object">Refund Object</a></p>
 
 <h2 id="gert-refun-list">Get refund list</h2>
 <pre class="highlight example"><code>$payment = $MK-&gt;getRefunds($refund_id);
@@ -1324,11 +1365,37 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
 <p><code class="prettyprint">GET /v1/refunds</code></p>
 
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>since</td>
+  <td>From which date you wish to query refunds. (Example since=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>until</td>
+  <td>Until which date you wish to query refunds.</td>
+  </tr>
+  <tr>
+  <td>status</td>
+  <td>One or more transaction status. (Example status=approved%2Ccompleted)</td>
+  </tr>
+  <tr>
+  <td>page</td>
+  <td>Which page to show. This is useful for frontend together with per_page parameter</td>
+  </tr>
+  <tr>
+  <td>per_page</td>
+  <td>How many statements in one page. This is useful for frontend together with page parameter</td>
+  </tr>
+  </tbody>
+  </table>
+
 <p><a href="https://developer.maksekeskus.ee/refund.list.php" target="_blank">Try in API tester</a></p>
 
-<h4 id="http-response">HTTP RESPONSE</h4>
-
-<p>JSON: array of <a href="#refund-object">Refund Objects</a></p>
 
 <h1 id="destinations">Destinations</h1>
 
@@ -1827,7 +1894,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     </tr>
     <tr>
     <td>sourceCountry</td>
-    <td>&nbsp;</td>
+    <td>Source country code (example: "EE")</td>
     </tr>
     <tr>
     <td>locale</td>
