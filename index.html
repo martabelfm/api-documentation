@@ -1756,7 +1756,11 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
   </code></pre>
   <h4 id="http-request">HTTP REQUEST</h4>
   <p><code class="prettyprint">POST /v1/carts</code></p>
+  <p>Instead of your store’s normal checkout page, customers will temporarily be directed to the Simple Checkout system, where the customer can link their social media accounts to fill in their information automatically.
 
+    Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
+    
+    Only at the very first encounter with Simple Checkout does it take a few extra seconds for the customer to link their social media account.</p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
     <tbody>
