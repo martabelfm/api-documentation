@@ -771,7 +771,7 @@ $statement = $MK-&gt;getAccountStatement($request);
 
 <p>You may also request the statement as an .xml file</p>
 
-<h4 id="http-request">HTTP REQUEST</h4>
+<h4 id="http-request">HTTP REQUEST EXAMPLES</h4>
 
 <p><code class="prettyprint">GET /v1/shop/accountstatements?payout_id=17041&since=2019-04-10%2B0300</code></p>
 <p><code class="prettyprint">GET /v1/shop/accountstatements/xml?since=2019-04-10%2B0300&until=2019-04-10%2B0300</code></p>
@@ -846,11 +846,11 @@ $statement = $MK-&gt;getShopFees($request);
   </tbody>
   </table>
 
-<h4 id="http-request">HTTP REQUEST</h4>
+<h4 id="http-request">HTTP REQUEST EXAMPLE</h4>
 <p><code class="prettyprint">GET /v1/shop/fees?since=2019-04-10%2B0300</code></p>
 
 <h1 id="transaction">Transaction</h1>
-<h2 id="Create transaction">Create transaction</h2>
+<h2 id="create-transaction">Create transaction</h2>
 <pre class="highlight example"><code>
 $reqbody = array(
         'transaction' =&gt; array(
@@ -1121,6 +1121,20 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransaction($transaction_id);
 </code></pre>
 
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>id</td>
+  <td>Transaction ID you get from here: <a href="#create-transaction">Create transaction</a></td>
+  </tr>
+  </tbody>
+</table>
+
+
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">GET /v1/transactions/{id}</code></p>
@@ -1134,6 +1148,19 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <h2 id="get-transaction-statement">Get transaction statement</h2>
 <pre class="highlight example"><code>$transaction = $MK-&gt;getTransactionStatement($transaction_id);
 </code></pre>
+
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>id</td>
+  <td>Transaction ID you get from here: <a href="#create-transaction">Create transaction</a></td>
+  </tr>
+  </tbody>
+</table>
 
 <h4 id="http-request">HTTP REQUEST</h4>
 
@@ -1149,16 +1176,63 @@ $transaction = $MK-&gt;createTransaction($_POST);
 <pre class="highlight php"><code>$request = array( 'since' =&gt; date("Y-m-d", strtotime("-1 Months")) );
 $transaction = $MK-&gt;getTransactions($request);
 </code></pre>
-
 <h4 id="http-request">HTTP REQUEST</h4>
 
 <p><code class="prettyprint">GET /v1/transactions</code></p>
+<table>
+  <tbody>
+  <tr>
+    <td><b>Field</b></td>
+    <td><b>Description</b></td>
+  </tr>
+  <tr>
+  <td>since</td>
+  <td>From which date you wish to query transactions. (Example since=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>until</td>
+  <td>Until which date you wish to query account statements.</td>
+  </tr>
+  <tr>
+  <td>completed_since</td>
+  <td>Transactions in completed status from the date (Example completed_since=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>completed_until</td>
+  <td>Transactions in completed status to the date (Example completed_until=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>refunded_since</td>
+  <td>Transactions in refunded status from the date (Example refunded_since=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>refunded_until</td>
+  <td>Transactions in refunded status to the date (Example refunded_until=2019-04-10%2B0300)</td>
+  </tr>
+  <tr>
+  <td>status</td>
+  <td>One or more transaction status. (Example status=approved%2Ccompleted)</td>
+  </tr>
+  <tr>
+  <td>page</td>
+  <td>Which page to show. This is useful for frontend together with per_page parameter</td>
+  </tr>
+  <tr>
+  <td>per_page</td>
+  <td>How many statements in one page. This is useful for frontend together with page parameter</td>
+  </tr>
+  </tbody>
+  </table>
 
 <p><a href="https://developer.maksekeskus.ee/transaction.list.php">Try in API tester</a></p>
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
 <p>JSON: array of <a href="#transaction-object">Transaction Objects</a></p>
+
+<h4 id="http-request">HTTP REQUEST EXAMPLE</h4>
+
+<p><code class="prettyprint">GET /v1/transactions?since=2019-04-10%2B0300&status=approved%2Ccompleted</code></p>
 
 <h2 id="create-payment">Create payment</h2>
 <pre class="highlight example"><code>$request = array(
