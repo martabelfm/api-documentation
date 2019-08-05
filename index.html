@@ -849,6 +849,7 @@ $statement = $MK-&gt;getShopFees($request);
 <h4 id="http-request">HTTP REQUEST</h4>
 <p><code class="prettyprint">GET /v1/shop/fees?since=2019-04-10%2B0300</code></p>
 
+<h1 id="transaction">Transaction</h1>
 <h2 id="Create transaction">Create transaction</h2>
 <pre class="highlight example"><code>
 $reqbody = array(
@@ -1180,8 +1181,7 @@ In context of bank-link payments flow the &#39;payment&rsquo; creation operation
 
 <h4 id="http-response">HTTP RESPONSE</h4>
 
-<h1 id="refunds">Refunds</h1>
-
+<h1 id="refund">Refund</h1>
 <h2 id="refund-object">Refund object</h2>
 
 <h2 id="create-refund">Create refund</h2>
@@ -1633,7 +1633,6 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <h1 id="simple-checkout">Simple checkout</h1>
 <h2 id="create-cart">Create cart</h2>
 <pre class="highlight example"><code>
-
   <h3>Example request</h3>
 {
   "amount": "15",
