@@ -469,6 +469,38 @@ API responds with the following HTTP status codes in case of errors:</p>
     </tr>
     </tbody>
     </table>
+<h2 id="test-credit-cards">Test credit cards</h2>
+<p>4012001037141112    | expiration date: any in future | CVC: anything is valid</p>
+<ul>
+  <li>4012001037141112 - Visa - 3D Secure enabled</li>
+  <li>4012001038443335 - Visa - 3D Secure NOT enabled</li>
+  <li>5444870724493746 - MasterCard - 3D Secure NOT enabled</li>
+  <li>5401030603708505 -  </li>
+  <li>5421590824439145 - MasterCard </li>
+</ul>
+<p><b>0-amount Authorization, "Save Card functionality"</b></p>
+<ul>
+  <li>5168830763287080 - MC valid until=10/21 CVC=949</li>
+  <li>4761739001010010 - Visa valid until=09/25 CVC=179</li>
+  <li>2223000010021381 - MC valid until=12/19 CVC=656</li>
+</ul>
+<p><b>Visa</b></p>
+<ul>
+  <li>4012001037490014 - Valid 3-D Secure Message With Embedded Whitespace Characters (OK)</li>
+  <li>4012001037141112 - Successful Authentication via 16-digit PAN (OK)</li>
+  <li>4005559876540 - Successful Authentication via 13-digit PAN (API error 1036: 100:do not honour)</li>
+  <li>4012001037167778 - Successful Merchant Attempt via 16-digit PAN (OK)</li>
+  <li>4012001036275556 - No Response From Visa Directory Server (API error 1036: Authorization failed)</li>
+  <li>4012001038443335 - Cardholder Not Participating (OK - fallback to regular payment)</li>
+  <li>4012001038488884 - Unable to Verify Enrollment (OK - fallback to regular payment)</li>
+  <li>4012001036298889 - Invalid Response from Directory Server (API error 1036: Authorization failed)</li>
+  <li>4012001036853337 - Invalid ACS Digital Signature (API error 1036: 946:3d secure field extraction from PaRes failed)</li>
+  <li>4012001036983332 - Expired ACS Signing Certificate (API error 1036: 946:3d secure field extraction from PaRes failed)</li>
+  <li>4012001037461114 - Authentication Failure (API error 1036: 182:3d secure authentication failed)</li>
+  <li>4012001037484447 - Authentication Not Available (API error 1036: 946:3d secure field extraction from PaRes failed)</li>
+  <li>4012001037490006 - Invalid Payer Authentication Response (API error 1036: 946:3d secure field extraction from PaRes failed)</li>
+</ul>
+
 <h1 id="getting-started">Getting Started</h1>
 <h2 id="basic-flow">Basic Flow</h2>
 
@@ -1352,7 +1384,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
   ]
     </code></pre>
     <h4 id="http-request">HTTP REQUEST</h4>
-
+    <p>Returns a list of possible delivery destinations based on the filter set with the fields below.</p>
     <p><code class="prettyprint">POST /v1/shipments/destinations</code></p>
 <table>
     <tbody>
@@ -1474,7 +1506,11 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 }
 </code></pre>
 <h4 id="http-request">HTTP REQUEST</h4>
+<p>
+  Generates Shipments in the carrier systems (Itella, Omniva, DPD..)
+  Requires your own credentials at these systems provided as input. 
 
+  Returns shipmentId(s).</p>
 <p><code class="prettyprint">POST /v1/shipments</code></p>
 <p><b>Credentials object</b></p>
 <table>
@@ -1602,7 +1638,11 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
   }
   </code></pre>
   <h4 id="http-request">HTTP REQUEST</h4>
+  <p>
+  Generates Parcel Labels based on Shipments created in  the carrier systems (Itella, Omniva, DPD..)
+  Requires your own credentials at these systems provided as input. 
 
+  Returns url to generated label(s) in .pdf format.</p>
   <p><code class="prettyprint">POST /v1/shipments/createlabels</code></p>
   <p><b>Credentials object</b></p>
   <table>
@@ -1761,6 +1801,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
     
     Only at the very first encounter with Simple Checkout does it take a few extra seconds for the customer to link their social media account.</p>
+      <p><img alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
     <tbody>
@@ -1798,6 +1839,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     </tr>
     </tbody>
     </table>
+
 
     <p><a href="https://developer.maksekeskus.ee/cart.php" target="_blank">Try in API tester</a></p>
 </div>
