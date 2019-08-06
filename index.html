@@ -87,99 +87,10 @@
 }
 
     </style>
-    <style>
-      body {font-family: Arial, Helvetica, sans-serif;}
-      
-      #myImg {
-        border-radius: 5px;
-        cursor: pointer;
-        transition: 0.3s;
-      }
-      
-      #myImg:hover {opacity: 0.7;}
-      
-      /* The Modal (background) */
-      .modal {
-        display: none; /* Hidden by default */
-        position: fixed; /* Stay in place */
-        z-index: 1; /* Sit on top */
-        padding-top: 100px; /* Location of the box */
-        left: 0;
-        top: 0;
-        width: 100%; /* Full width */
-        height: 100%; /* Full height */
-        overflow: auto; /* Enable scroll if needed */
-        background-color: rgb(0,0,0); /* Fallback color */
-        background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-      }
-      
-      /* Modal Content (image) */
-      .modal-content {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-      }
-      
-      /* Caption of Modal Image */
-      #caption {
-        margin: auto;
-        display: block;
-        width: 80%;
-        max-width: 700px;
-        text-align: center;
-        color: #ccc;
-        padding: 10px 0;
-        height: 150px;
-      }
-      
-      /* Add Animation */
-      .modal-content, #caption {  
-        -webkit-animation-name: zoom;
-        -webkit-animation-duration: 0.6s;
-        animation-name: zoom;
-        animation-duration: 0.6s;
-      }
-      
-      @-webkit-keyframes zoom {
-        from {-webkit-transform:scale(0)} 
-        to {-webkit-transform:scale(1)}
-      }
-      
-      @keyframes zoom {
-        from {transform:scale(0)} 
-        to {transform:scale(1)}
-      }
-      
-      /* The Close Button */
-      .close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 40px;
-        font-weight: bold;
-        transition: 0.3s;
-      }
-      
-      .close:hover,
-      .close:focus {
-        color: #bbb;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      
-      /* 100% Image Width on Smaller Screens */
-      @media only screen and (max-width: 700px){
-        .modal-content {
-          width: 100%;
-        }
-      }
-      </style>
     <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print.css" rel="stylesheet" media="print" />
-    <link href="stylesheets/style.css" rel="stylesheet" media="style" />
-      <script src="javascripts/all.js"></script>
+    <link href="stylesheets/style.css" rel="stylesheet" />
+    <script src="javascripts/all.js"></script>
 
   </head>
   <body class="index" data-languages="[&quot;php&quot;,&quot;shell&quot;]">
@@ -191,10 +102,6 @@
     </a>
     <div id="navbar" class="tocify-wrapper">
       <img src="images/m-logo.svg" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="php">PHP SDK</a>
-              <a href="#" data-language-name="shell">cURL</a>
-        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -212,7 +119,6 @@
   <div id="caption"></div>
 </div>
           <h1 id="introduction">Introduction and overview</h1>
-          <img id="myImg" src="images/sco-sequence.svg" alt="Snow" style="width:100%;max-width:300px">
 <p>Welcome! In this page you can find a quick overview of the Makecommerce ecosystem which will be explained more thoroughly in this page.
   <br>
   <br>
@@ -620,11 +526,11 @@ API responds with the following HTTP status codes in case of errors:</p>
 <li>MK servers will send additional async message about the transaction status change to the shop server&rsquo; notification_url (see notifications)</li>
 </ol>
 
-<p><img alt="banklink payment diagram" src="http://developer.maksekeskus.ee/img/banklink-payment.svg" /></p>
+<p><img onclick="openModal(this);" alt="banklink payment diagram" src="http://developer.maksekeskus.ee/img/banklink-payment.svg" /></p>
 
-<p><img alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-3D-oneoff.svg" /></p>
+<p><img onclick="openModal(this);" alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-3D-oneoff.svg" /></p>
 
-<p><img alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-no3D-oneoff.svg" /></p>
+<p><img onclick="openModal(this);" alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-no3D-oneoff.svg" /></p>
 <h2 id="create-account">Create account</h2>
 
 <p>Request us to create you an account in our Test Environment so you could explore and test your integration in full.<br>
@@ -657,7 +563,7 @@ This is how you get you API keys for the integration.</p>
 </ul>
 
 <p>The entry-points can be declared in your shop configuration, you can change them in Merchant Portal under API settings. You can get there by going to <a href="https://merchant-test.maksekeskus.ee/api.html" target="_blank">Test Merchant Portal</a><br>
-<p><img alt="api endpoints" src="images/endpoints.PNG" /></p>
+<p><img onclick="openModal(this);" alt="api endpoints" src="images/endpoints.PNG" /></p>
 <p>Alternatively, you can dynamically specify them for each transaction when you create the transaction (transaction_urls). For example using API tester you can set these urls here <a href="https://developer.maksekeskus.ee/transaction.php" target="_blank">API tester - Create transaction</a> <br>
 <br>
 If you have problems with this please take a look at <b>"How to use our API tester?"</b> section. </p>
@@ -671,7 +577,7 @@ If you have problems with this please take a look at <b>"How to use our API test
     <li>After setting up your context with either predefined setup or your shop setup click on the <b>Save context</b> button which is located in the bottom of the page.</li>
   </ol>
 
-  <p><img alt="setting context in api tester" src="images/context.png" /></p>
+  <p><img onclick="openModal(this);" alt="setting context in api tester" src="images/context.png" /></p>
   </p>
   <p>
   <br> <b>Making your first API tester request</b> <br>
@@ -683,7 +589,7 @@ If you have problems with this please take a look at <b>"How to use our API test
     <li>In the response body you can see all the payment method links and these are duplicated also in the bottom of the page.</li>
     <li>Clicking on "redirect" link in the bottom of the page will send you to the payment page of just created transaction.</li>
   </ul>
-  <p><img alt="response from the api tester" src="images/paymentlinks.PNG" /></p>
+  <p><img onclick="openModal(this);" alt="response from the api tester" src="images/paymentlinks.PNG" /></p>
 
 </p>
 
@@ -1961,7 +1867,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
     
     Only at the very first encounter with Simple Checkout it takes a few extra seconds for the customer to link their social media account.</p>
-      <p><img id="myImg" alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
+      <p><img onclick="openModal(this);" alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
     <tbody>
@@ -2004,7 +1910,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     <p><a href="https://developer.maksekeskus.ee/cart.php" target="_blank">Try in API tester</a></p>
 </div>
       <div class="dark-box">
-          <div class="lang-selector">
+          <div id="lang-selector" class="lang-selector">
                 <a href="#" data-language-name="example">Examples</a>
           </div>
       </div>
