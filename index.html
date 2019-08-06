@@ -129,7 +129,7 @@
       </tr>
       <tr>
       <td>API Docs</td>
-      <td>API Docs is the starting point for using MakeCommerce ecosystem as a developer. This page has all the info gathered together or it's linking you to the right resource.</td>
+      <td>API Docs is the starting point for using MakeCommerce ecosystem as a developer. This page has all the info gathered together or it is linking you to the right resource.</td>
       </tr>
       <tr>
       <td><a href="https://developer.maksekeskus.ee/intro.php" target="_blank">API Tester</a></td>
@@ -231,8 +231,8 @@
     </tr>
     <tr>
     <td>APPROVED</td>
-    <td>This state is relevant to to some payment channels only – card payments, Citadele bank-link.
-        On card payments this means that card data has been already verified, and transaction is waiting now payment.
+    <td>This state is relevant to some payment channels only – card payments, Citadele bank-link.
+        On card payments this means that card data has been already verified, and transaction is waiting now for payment.
         Regular card payments are however automatically completed.</td>
     </tr>
     <tr>
@@ -278,7 +278,7 @@
     </tr>
     <tr>
     <td>FAILED</td>
-    <td>can happen only to refunds made to finnish bank-link payments.
+    <td>Can happen only to refunds made to finnish bank-link payments.
         See more about complexity of Finnish bank-link refunds
         Or in case there was technical error while creating the refund at card payment processor	</td>
     <td>&nbsp;</td>
@@ -513,7 +513,7 @@ API responds with the following HTTP status codes in case of errors:</p>
 <li>Depending on method the user selected, the e-shop server:
 
 <ol>
-<li>Case banklink: redirects user to the banklink url supplied by the ransaction creation response</li>
+<li>Case banklink: redirects user to the banklink url supplied by the transaction creation response</li>
 <li>Case credit card: launches MK Credit Card Dialog by invoking checkout.js</li>
 </ol></li>
 <li>The user performs the payment in the channel</li>
@@ -534,7 +534,7 @@ API responds with the following HTTP status codes in case of errors:</p>
 <p><img alt="card payment diagram 3d" src="http://developer.maksekeskus.ee/img/card-payment-no3D-oneoff.svg" /></p>
 <h2 id="create-account">Create account</h2>
 
-<p>Request us to create you an account in our Test Environment so you could expolere and test your integration in full.<br>
+<p>Request us to create you an account in our Test Environment so you could explore and test your integration in full.<br>
 Send your request to: <a href="mailto:support@maksekeskus.ee">support@maksekeskus.ee</a></p>
 
 <p>We will create you a shop in our Test environment.<br>
@@ -542,7 +542,7 @@ This is how you get you API keys for the integration.</p>
 
 <h2 id="sdk">SDK</h2>
 
-<p>We do have a small libabry for PHP available in <a href="https://github.com/maksekeskus/maksekeskus-php" target="_blank">github</a>.</p>
+<p>We do have a small library for PHP available in <a href="https://github.com/maksekeskus/maksekeskus-php" target="_blank">github</a>.</p>
 
 <h2 id="return-urls">Return URLS</h2>
 
@@ -560,7 +560,7 @@ This is how you get you API keys for the integration.</p>
 <ul>
 <li><code class="prettyprint">return_url</code> - main interface, </li>
 <li><code class="prettyprint">cancel_url</code> - optional, used when user deliberately cancels the payment in the channel </li>
-<li><code class="prettyprint">notification_url</code> - this is where M2M messagess are sent (processing time should be below 10s (http request timeout))</li>
+<li><code class="prettyprint">notification_url</code> - this is where M2M messages are sent (processing time should be below 10s (http request timeout))</li>
 </ul>
 
 <p>The entry-points can be declared in your shop configuration, you can change them in Merchant Portal under API settings. You can get there by going to <a href="https://merchant-test.maksekeskus.ee/api.html" target="_blank">Test Merchant Portal</a><br>
@@ -570,7 +570,7 @@ This is how you get you API keys for the integration.</p>
 If you have problems with this please take a look at <b>"How to use our API tester?"</b> section. </p>
 
 <h2 id="how-to-use-our-api-tester">How to use our API tester?</h2>
-<p>Using our API tester for the first time could be confusing.
+<p>Using our API tester for the first time can be confusing.
   <br><br> <b>Setting up your API tester context:</b> <br>
   <ol>
     <li>Firstly choose a context <a href="https://developer.maksekeskus.ee/context.php?action=edit" target="_blank">Setup your context</a></li>
@@ -582,11 +582,11 @@ If you have problems with this please take a look at <b>"How to use our API test
   </p>
   <p>
   <br> <b>Making your first API tester request</b> <br>
-  We will be creating a transaction as a example.
+  We will be creating a transaction as an example.
   <ul>
     <li>Go to <a href="https://developer.maksekeskus.ee/transaction.php" target="_blank">https://developer.maksekeskus.ee/transaction.php</a></li>
     <li>By default all the required fields are filled in so the "Create transaction" button will work and it will create a transaction using the context you set in previous steps. (Edit these fields to play around and see how it works)</li>
-    <li>If response code "201" is shown in the page then the request was successful </li>  
+    <li>If response code "201" is shown on the page then the request was successful </li>  
     <li>In the response body you can see all the payment method links and these are duplicated also in the bottom of the page.</li>
     <li>Clicking on "redirect" link in the bottom of the page will send you to the payment page of just created transaction.</li>
   </ul>
@@ -654,7 +654,7 @@ private static String sha512(String input, String secret)  {
 }
 </code></pre>
 
-<p>All message-specific content is sent as a JSON object in request parameter <code class="prettyprint">json</code> and the message authentication code (MAC) is sent in request parameter <code class="prettyprint">mac</code>. </p>
+<p>All message-specific content is sent as an JSON object in request parameter <code class="prettyprint">json</code> and the message authentication code (MAC) is sent in request parameter <code class="prettyprint">mac</code>. </p>
 
 <p>The MAC is composed as follows: </p>
 
@@ -684,7 +684,7 @@ $shop = $MK-&gt;getShopConfig($request);
 
 <p><code class="prettyprint">GET /v1/shop/configuration</code></p>
 
-<p>Retrieves configuration of the &#39;Shop&rsquo; as a json array that could be handy to cache on your server side. 
+<p>Retrieves configuration of the &#39;Shop&rsquo; as an json array that can be handy to cache on your server side. 
 (You could refresh this i.e. each hour or daily). </p>
 
 <p>Most importantly the returned data contains:</p>
@@ -1050,7 +1050,7 @@ $transaction = $MK-&gt;createTransaction($_POST);
 
 <p><code class="prettyprint">POST /v1/transactions</code></p>
 
-<p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls managable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
+<p>To create a new transaction simply provide a JSON object containing the required attributes for the new transaction. When creating a new transaction, an embedded payment_methods list is returned, containing the available payment methods for making a payment for this transaction. Transaction amount and currency are required. Transaction reference max-length is 20 characters.Customer ip is required. Customer country must be passed as an alpha-2 code according to ISO 3166-1. Customer locale must be passed as an alpha-2 code according to ISO 639-1. Transaction_url - optionalEach shop has its set of urls manageable in Mercant Portal under the API settings. You can optionally over-ride these urls when creating the transaction. If specified then full set must be provided (return_ur, cancel_url, notification_url)</p>
 
 <p><b>Customer object</b></p>
 <table>
@@ -1124,10 +1124,10 @@ $transaction = $MK-&gt;createTransaction($_POST);
     <tr>
     <td>cancel_url, notification_url, return_url</td>
     <td>No</td>
-    <td>Each shop has its set of urls managable in Mercant Portal under the API settings 
+    <td>Each shop has its set of urls manageable in Mercant Portal under the API settings 
         You can optionally over-ride these urls when creating the transaction 
-        It might be handy at some e-commerce platforms where otherwise it is difficult determine previous context (i.e. user language) 
-        Or situation when multiple develpers are working on integration of one shop on their local work stations.
+        It might be handy at some e-commerce platforms where otherwise it is difficult to determine previous context (i.e. user language) 
+        Or situation when multiple developers are working on integration of one shop on their local work stations.
         
         Be careful to provide correct urls, with protocol (i.e. https://myshop.com/returnhandler/). We reccommend to use POST method.
         If already, then you have to specify full set - you can not pass just one of the 3 urls (though they can be equal)</td>
@@ -1303,7 +1303,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <p><code class="prettyprint">POST /transactions/{id}/refunds</code></p>
 
 <p>Note that you should verify state of the refund in the response. You may be returned 200 response (resource created) but it's state may be FAILED. 
-  While the refund is in state SENT its amountt is reserved on shop's account. 
+  While the refund is in state SENT its amount is reserved on shop's account. 
   You need sufficent balance on the account to make refunds. Take a look at the refund states here: <a href="#refund-states">Refund states</a></p>
 
 <table>
@@ -1785,7 +1785,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
       <tr>
       <td>Sender(name, phone, email, postalCode)</td>
       <td>Yes</td>
-      <td>Senders name, phone number, email address and postalcode.</td>
+      <td>Senders name, phone number, email address and postal code.</td>
       </tr>
       <tr>
       <td>shipmentId</td>
@@ -1867,7 +1867,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 
     Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
     
-    Only at the very first encounter with Simple Checkout does it take a few extra seconds for the customer to link their social media account.</p>
+    Only at the very first encounter with Simple Checkout it takes a few extra seconds for the customer to link their social media account.</p>
       <p><img alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
