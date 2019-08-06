@@ -85,12 +85,27 @@
 .highlight .ss {
   color: #90a959;
 }
+
     </style>
     <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+    <link href="stylesheets/style.css" rel="stylesheet" media="style" />
       <script src="javascripts/all.js"></script>
-  </head>
+      <script src="javascripts/script.js"></script>
 
+  </head>
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- The Close Button -->
+  <span class="close">&times;</span>
+
+  <!-- Modal Content (The Image) -->
+  <img class="modal-content" id="img01">
+
+  <!-- Modal Caption (Image Text) -->
+  <div id="caption"></div>
+</div>
   <body class="index" data-languages="[&quot;php&quot;,&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
@@ -160,15 +175,12 @@
 </p>
 <h2 id="useful-links">Useful links</h2>
   <ul>
-    <li>Backoffice (live): <a href="https://back.maksekeskus.ee" target="_blank">https://back.maksekeskus.ee</a></li>
-    <li>Backoffice (test): <a href="https://back-test.maksekeskus.ee" target="_blank">https://back-test.maksekeskus.ee</a></li>
     <li>Frontoffice live environment: <a href="https://merchant.maksekeskus.ee" target="_blank">https://merchant.maksekeskus.ee</a></li>
     <li>Frontoffice test environment: <a href="https://merchant-test.maksekeskus.ee" target="_blank">https://merchant-test.maksekeskus.ee</a></li>
     <li>Live API endpoint: <a href="https://api.maksekeskus.ee/v1" target="_blank">https://api.maksekeskus.ee/v1</a></li>
     <li>Test API endpoint: <a href="https://api-test.maksekeskus.ee/v1" target="_blank">https://api-test.maksekeskus.ee/v1</a></li>
     <li>API tester:  <a href="https://developer.maksekeskus.ee/intro.php" target="_blank">https://developer.maksekeskus.ee/intro.php</a></li>
     <li>Our github:  <a href="https://github.com/maksekeskus/" target="_blank">https://github.com/maksekeskus/</a></li>
-    <li>Maksekeskus Zendesk: <a href="https://maksekeskus.zendesk.com" target="_blank">https://maksekeskus.zendesk.com</a></li>
     <li>FAQ:  <a href="https://makecommerce.net/faq/" target="_blank">https://makecommerce.net/faq/</a></li>
     <li>Maksekeskus AS Service Status: <a href="http://status.maksekeskus.ee/" target="_blank">http://status.maksekeskus.ee/</a></li>
   </ul>
@@ -1868,7 +1880,7 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
     
     Only at the very first encounter with Simple Checkout it takes a few extra seconds for the customer to link their social media account.</p>
-      <p><img alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
+      <p><img id="myImg" onclick="modal(this.id)" alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
     <tbody>
