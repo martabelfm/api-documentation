@@ -1721,6 +1721,15 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
 <p><a href="https://developer.maksekeskus.ee/labels.php" target="_blank">Try in API tester</a></p>
 
 <h1 id="simple-checkout">Simple checkout</h1>
+<h2 id="simple-checkout-overview">Simple checkout overview</h2>
+<p>Instead of your store’s normal checkout page, customers will temporarily be directed to the Simple Checkout system, where the customer can link their social media accounts to fill in their information automatically.
+
+  Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
+  
+  Only at the very first encounter with Simple Checkout it takes a few extra seconds for the customer to link their social media account.</p>
+
+<p>Simple checkout is currently supported by WooCommerce, PrestaShop and OpenCart platforms. Manuals for those can be found at the bottom of <a href="https://makecommerce.net/simple-checkout/" target="_blank">Simple Checkout Manuals</a></p>
+<p><b>These platform plugins will cover all the technical parts of the Simple Checkout. If you wish to use it without these platforms then read the next chapter.</b></p>
 <h2 id="create-cart">Create cart</h2>
 <pre class="highlight example"><code>
   <h3>Example request</h3>
@@ -1780,11 +1789,17 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
   </code></pre>
   <h4 id="http-request">HTTP REQUEST</h4>
   <p><code class="prettyprint">POST /v1/carts</code></p>
-  <p>Instead of your store’s normal checkout page, customers will temporarily be directed to the Simple Checkout system, where the customer can link their social media accounts to fill in their information automatically.
-
-    Our system is already being used by many online stores in the Baltics and if your customer has used Simple Checkout with another online store before, their data will already be prefilled.
-    
-    Only at the very first encounter with Simple Checkout it takes a few extra seconds for the customer to link their social media account.</p>
+  <p><b>How to implement Simple Checkout without using plugins made for WooCommerce, PrestaShop and OpenCart platforms?</b></p>
+  <ol>
+    <li>Create a cart request (look at the example in the "Examples" tab)</li>
+    <li>Choose which shipment methods you want to offer and for what prices</li>
+    <li>You need to have the cartToOrder endpoint(add it to the request as well), which will capture carts info, save it somewhere(in database for example)</li>
+    <li>Wait for info about payment which will be sent to the return url <a href="#return-urls">More info about return urls</a></li>
+    <li>If payment has been received from the client find the carts info that was sent to your server based on the succesful payment info and then create a shipment using our API or using third-party carrier API straightly.</li>
+    <li>Take a look at <a href="#shipments">Shipments</a> and <a href="#destinations">Destinations</a> for more info about using our API to fulfill your order.</li>
+    <br>
+    <b>IMPORTANT: To do everything automatically you need to only offer carriers which you have contracts for, because <a href="#shipments">Shipments</a> and <a href="#destinations">Destinations</a> require credentials for those service providers.</b>
+  </ol>
       <p><img onclick="openModal(this);" alt="sco sequence diagram" src="images/sco-sequence.svg" /></p>
   <p><b>From the response open "scoUrl" link to see the created cart.</b></p>
   <table>
@@ -1798,8 +1813,16 @@ $payment = $MK-&gt;createRefund($transaction_id, $request);
     <td>Cart reference number or symbol.</td>
     </tr>
     <tr>
-    <td>pluginUrls</td>
-    <td>cartToOrder, calculateShipment and tos Urls. </td>
+    <td>cartToOrder</td>
+    <td>Your callback url for Simple Checkout. Simple Checkout will send the user's cart info there. This endpoint must respond with status code 200 and empty JSON.</td>
+    </tr>
+    <tr>
+    <td>calculateShipment</td>
+    <td>Shipment calculation endpoint.</td>
+    </tr>
+    <tr>
+    <td>tos</td>
+    <td>Link to your TOS page.</td>
     </tr>
     <tr>
     <td>amount</td>
